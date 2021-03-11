@@ -3,7 +3,7 @@ import '../Styles/Node.css'
 class Node extends React.Component {
     render(){
       
-        const {sideLength,isStart,isEnd} = this.props;
+        const {sideLength,isStart,isEnd,isVisited} = this.props;
 
         const divStyle = {
             height : `${sideLength}px`,
@@ -12,7 +12,9 @@ class Node extends React.Component {
         }
 
         return(
-            <td className = 'node' style = {divStyle}>
+            <td 
+            className = {`node ${isVisited ? 'visited' : ''}`}
+            style = {divStyle}>
             </td>
         )
     }
