@@ -8,7 +8,6 @@ class Node extends React.Component {
         const divStyle = {
             height : `${sideLength}px`,
             width : `${sideLength}px`,
-            margin:'1px',
             backgroundColor:`${isStart?'#66c2ff':isEnd?'#ff4d94':''}`
         }
 
@@ -19,3 +18,5 @@ class Node extends React.Component {
     }
 }
 export default Node;
+// how to render an imported component
+// can we render just the cell component in react
