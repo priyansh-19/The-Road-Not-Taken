@@ -1,40 +1,36 @@
 import React from 'react';
 import Node from './Node';
 import '../Styles/Board.css'
-
+import {algorithmBFS} from '../Algorithms/BFS'
 
 class Board extends React.Component {
-
 
     constructor(){
         super();
         const {startX,startY,endX,endY,xNodes,yNodes,sideLength} = this.precomputation();
-        this.state  = ({ startX,startY,endX,endY,sideLength,xNodes,yNodes,nodes:[]});
+        this.state = ({ startX,startY,endX,endY,sideLength,xNodes,yNodes,isMouseClicked:false,moveStart:false,moveEnd:false,nodes:[]});
         
     }
    
     getViewport = () =>{
-
       const width = window.innerWidth;
       const height = window.innerHeight;
       return [width, height];
-
     }
-  
+
     componentDidMount(){
-   
         const {xNodes,yNodes} = this.state;
         const nodes = this.getInitialGrid(xNodes,yNodes);
         //cannot make a call to another function that uses updated state
         this.setState({nodes});
-    
     }
+
     precomputation(){
         let [viewPortWidth,viewPortHeight] = this.getViewport();
         viewPortHeight *= (0.6);
-        viewPortWidth *= (0.8);
+        viewPortWidth *= (0.7);
 
-        const sideLength = ((viewPortHeight*8)/100)  ;
+        const sideLength = ((viewPortHeight*(6.5))/100)  ;
         const xNodes = parseInt(viewPortWidth/sideLength);
         const yNodes = parseInt(viewPortHeight/sideLength);
 
@@ -59,85 +55,104 @@ class Board extends React.Component {
         return nodes;
     }
     
-    createNode = (i,j) =>{
-            const {startX,startY,endX,endY} = this.state;
-            const isStart = (j === startX && i === startY ? true : false);
-            const  isEnd = j === endX && i === endY ? true : false
-            const node = {
-                row:i,
-                col:j,
-                isStart:isStart,
-                isEnd:isEnd,
-                isVisited:false,
-            }
-            return node;
+    onMouseDown = (row,col) =>{
+        const nodes = this.state.nodes;
+       
+        if(nodes[row][col].isStart){
+            this.setState({nodes,isMouseClicked:true,moveStart:true});
+
+        }
+        else if(nodes[row][col].isEnd){
+            this.setState({nodes,isMouseClicked:true,moveEnd:true});
+        }
+        else{
+        nodes[row][col].isWall = true;
+        this.setState({nodes,isMouseClicked:true});
+        }
+    }
+
+    onMouseEnter = (row,col) =>{
+        if(!this.state.isMouseClicked){return;}
+        const {nodes} = this.state;
+        if(this.state.moveStart){
+            nodes[row][col].isStart = true;
+        }
+        else if(this.state.moveEnd){
+            nodes[row][col].isEnd = true;
+        }
+        else{
+        nodes[row][col].isWall = true;
+        }
+        this.setState({nodes})
+    }
+
+    onMouseLeave = (row,col) =>{
+        if(!this.state.isMouseClicked ){return;}
+        const {nodes} = this.state;
+        if(this.state.moveStart){
+            nodes[row][col].isStart = false;
+            this.setState({nodes});
+        }
+        else if(this.state.moveEnd){
+            nodes[row][col].isEnd = false;
+            this.setState({nodes});
+        }
+    }
+
+    onMouseUp = (row,col) =>{
+        if(this.state.moveStart){
+            this.setState({isMouseClicked:false,moveStart:false,moveEnd:false,startY:row,startX:col})
+        }
+        else if (this.state.moveEnd){
+            this.setState({isMouseClicked:false,moveStart:false,moveEnd:false,endY:row,endX:col})
+        }
+        else{
+            this.setState({isMouseClicked:false,moveStart:false,moveEnd:false})
+        }
     }
     
+    visualizeAlgorithm = () =>{
+
+        const path = algorithmBFS(this.state);
+        for(let i = 0;i<path.length;i++){
+            setTimeout( () =>{
+                this.createNewGrid(path[i]);
+                //could also fetch element and make changes in dom
+            }, i*(20))
+        }
+    }
+
     createNewGrid = (value) =>{
         const i = value[0];
         const j = value[1];
         const {nodes,yNodes,xNodes,startX} = this.state;
         
-        if(i < yNodes && j< xNodes){
+        if(i < yNodes && j< xNodes && i>=0 && j>=0 && !nodes[i][j].isStart){
+            
             nodes[i][j].isVisited = true;
         }
         this.setState({nodes});
     }
-    algorithmBFS = () =>{
-        const {startX,startY,endX,endY,xNodes,yNodes} = this.state;
-        const path = [];
-        const q1 = [];
-        const vis = new Array(yNodes).fill(0).map(() => new Array(xNodes).fill(0));
-         //implement queue using a vector/array
-        q1.push([startY,startX]);
-        q1.push([-1,-1])
-
-        while(q1.length !== 0){
-            const currentNodeIndex = q1[0];
-            q1.shift();
-
-            if(currentNodeIndex[0] === -1){
-                if(q1.length === 0){break;}
-                q1.push([-1,-1]);
-                continue;
-            }
-            const i = currentNodeIndex[0];
-            const j = currentNodeIndex[1];
-            if(i === endY && j === endX){break;}
-            path.push([i,j]);
-            vis[i][j] = 1;
-
-            const adj = [
-                [1,0],[0,1],[-1,0],[0,-1]
-            ]
-            for(let k=0;k<4;k++){
-                const newY = adj[k][0] + i;
-                const newX = adj[k][1] + j;
-                if(newX < xNodes && newX >=0 && newY < yNodes && newY >=0 && !vis[newY][newX]){
-                    q1.push([newY,newX]);
-                    vis[newY][newX] = 1;
-                }
-            }
+    
+    createNode = (i,j) =>{
+        const {startX,startY,endX,endY} = this.state;
+        const isStart = (j === startX && i === startY ? true : false);
+        const  isEnd = j === endX && i === endY ? true : false
+        const node = {
+            row:i,
+            col:j,
+            isStart:isStart,
+            isEnd:isEnd,
+            isVisited:false,
+            isWall:false
         }
-        return path;
-        
-    }
-    visualizeAlgorithm = () =>{
-
-        const path = this.algorithmBFS();
-        for(let i = 0;i<path.length;i++){
-            setTimeout( () =>{
-                this.createNewGrid(path[i]);
-                //could also fetch element and make changes in dom
-            }, i*(25))
-        }
-    }
+        return node;
+}
 
     render(){
 
-        // console.log(this.state,'render  ');
+       
         const {nodes} = this.state;
-        // this.visualizeAlgorithm();
         return (
             <div>
             <button onClick = {this.visualizeAlgorithm}>Visualize</button>
@@ -146,7 +161,7 @@ class Board extends React.Component {
                     {nodes.map( (row,i) => {
                         return <tr key = {i}>
                             {row.map((node,j) => {
-                                const {row,col,isStart,isEnd,isVisited} = node;
+                                const {row,col,isStart,isEnd,isVisited,isWall} = node;
                                 return <Node 
                                     key = {`${i} + ${j}`}
                                     row = {row}
@@ -154,7 +169,12 @@ class Board extends React.Component {
                                     sideLength = {this.state.sideLength}
                                     isStart = {isStart}
                                     isEnd = {isEnd}
+                                    isWall = {isWall}
                                     isVisited = {isVisited}
+                                    onMouseDown = {this.onMouseDown}
+                                    onMouseEnter = {this.onMouseEnter}
+                                    onMouseLeave = {this.onMouseLeave}
+                                    onMouseUp = {this.onMouseUp}
                                 />
                                 })
                             }

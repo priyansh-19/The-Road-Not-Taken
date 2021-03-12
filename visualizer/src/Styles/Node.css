@@ -1,8 +1,121 @@
 .node{
     /* background-color: antiquewhite; */
-    border: 1px solid black;
+    border: 1px solid steelblue
   
+}
+.isStart{
+  background-color: rgb(122, 222, 233);
+  animation-name: startAnimation;
+  animation-duration: 0.6s; 
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running; 
+}
+.isEnd{
+  /* background-color: rgb(243, 116, 194); */
+  animation-name: endAnimation;
+  animation-duration: 0.6s; 
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running; 
 }
 .visited{
     background-color:cadetblue;
+    animation-name: visitedAnimation;
+    animation-duration: 1.2s; 
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running; 
+
 }
+@keyframes visitedAnimation {
+    0% {
+      transform: scale(0.3);
+      background-color: rgba(0, 0, 66, 0.75);
+      border-radius: 100%;
+    }
+  
+    50% {
+      background-color: rgba(17, 104, 217, 0.75);
+    }
+  
+    75% {
+      transform: scale(1.2);
+      background-color: rgba(0, 217, 159, 0.75);
+    }
+  
+    100% {
+      transform: scale(1);
+      background-color: rgba(0, 190, 218, 0.75);
+    }
+  }
+
+  .isWall{
+    background-color: black;
+    animation-name: wallAnimation;
+    animation-duration: 0.3s; 
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running; 
+
+  }
+  @keyframes wallAnimation {
+    0%{
+      transform: scale(0);
+      background-color: aqua 
+    }
+    50% {
+      background-color: aqua;
+    }
+    75% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+      background-color :black
+    }
+
+  }
+  @keyframes startAnimation{
+    0%{
+      transform: scale(0.2);
+      background-color: rgb(38, 91, 198) ;
+      border-radius:100%;
+    }
+   
+    75% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+      background-color: rgb(93, 229, 250);
+    }
+  }
+  @keyframes endAnimation{
+    0%{
+      transform: scale(0.2);
+      background-color: rgb(206, 21, 89) ;
+      border-radius:100%;
+    }
+   
+    75% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+      background-color: rgb(243, 116, 194);
+
+    }
+  }
