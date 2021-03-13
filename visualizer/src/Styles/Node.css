@@ -6,7 +6,7 @@
 .isStart{
   background-color: rgb(122, 222, 233);
   animation-name: startAnimation;
-  animation-duration: 0.6s; 
+  animation-duration: 0.8s; 
   animation-timing-function: ease-out;
   animation-delay: 0;
   animation-direction: alternate;
@@ -15,9 +15,9 @@
   animation-play-state: running; 
 }
 .isEnd{
-  /* background-color: rgb(243, 116, 194); */
+  background-color: rgb(243, 116, 194);
   animation-name: endAnimation;
-  animation-duration: 0.6s; 
+  animation-duration: 0.8s; 
   animation-timing-function: ease-out;
   animation-delay: 0;
   animation-direction: alternate;
@@ -26,7 +26,7 @@
   animation-play-state: running; 
 }
 .visited{
-    background-color:cadetblue;
+    background-color:rgba(0, 190, 218, 0.75);
     animation-name: visitedAnimation;
     animation-duration: 1.2s; 
     animation-timing-function: ease-out;
@@ -60,7 +60,7 @@
   }
 
   .isWall{
-    background-color: black;
+    /* background-color: black; */
     animation-name: wallAnimation;
     animation-duration: 0.3s; 
     animation-timing-function: ease-out;

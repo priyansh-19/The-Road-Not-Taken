@@ -1,0 +1,54 @@
+
+
+.selectAlgorithmMain{
+    left:10px;
+    position: absolute;
+    height : 62vh;
+    min-width: 120px;
+    min-height: 200px;
+    width:10vw;
+    text-align: center;
+    font-size: 1.2em; 
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-content: center;
+}
+.algorithmList{
+    padding:0px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: inherit;
+    /* border: 1px black solid; */
+    /* background-color: aqua; */
+}
+.headerAlgorithmList{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    /* font-size: 1.35em; */
+    /* position: relative; */
+    font-size: 130%;
+    color: rgb(46, 44, 44);
+    margin-left: 5px;
+    max-width: inherit;
+    /* border: 1px solid black; */
+}
+.algorithmListItem{
+    transition: 0.1s ease-in-out;
+    cursor: pointer;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight:  300;
+    font-size: 1.27em;
+    margin-top: 22px;
+    max-width: inherit;
+    /* overflow: hidden; */
+    /* margin-right: 40px;
+    margin-top: 20px; */
+}
+.isSelectedAlgorithm{
+    color:rgb(236, 53, 202);
+    font-weight: 300;
+}
+

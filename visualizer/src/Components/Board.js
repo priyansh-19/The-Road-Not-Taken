@@ -1,32 +1,62 @@
 import React from 'react';
 import Node from './Node';
 import '../Styles/Board.css'
+import Header from './Header'
+import AlgorithmList from './AlgorithmList';
 import {algorithmBFS} from '../Algorithms/BFS'
+
+
+const algorithmList = {
+Dijkstras:algorithmBFS,
+BFS:algorithmBFS,
+DFS:algorithmBFS,
+Swarm:algorithmBFS,
+};
 
 class Board extends React.Component {
 
     constructor(){
         super();
         const {startX,startY,endX,endY,xNodes,yNodes,sideLength} = this.precomputation();
-        this.state = ({ startX,startY,endX,endY,sideLength,xNodes,yNodes,isMouseClicked:false,moveStart:false,moveEnd:false,nodes:[]});
-        
+        this.state = ({ 
+            startX,
+            startY,
+            endX,
+            endY,
+            sideLength,
+            xNodes,
+            yNodes,
+            isMouseClicked:false,
+            moveStart:false,
+            moveEnd:false,
+            isSelectedAlgorithm:'BFS',
+            viewPortWidth:window.innerWidth,
+            viewPortHeight:window.innerHeight,
+            nodes:[]
+        });
+        //  console.log(this.state);
     }
    
     getViewport = () =>{
       const width = window.innerWidth;
       const height = window.innerHeight;
-      return [width, height];
+      return [height, width];
     }
 
     componentDidMount(){
-        const {xNodes,yNodes} = this.state;
-        const nodes = this.getInitialGrid(xNodes,yNodes);
+
+        const {xNodes,yNodes,startX,startY,endX,endY} = this.state;
+        const nodes = this.getInitialGrid(xNodes,yNodes,startX,startY,endX,endY);
+
+        window.addEventListener('resize',() =>{
+            this.setState({viewPortWidth:window.innerWidth,viewPortHeight:window.innerHeight},()=>{this.recomputation()});
+        });
         //cannot make a call to another function that uses updated state
         this.setState({nodes});
     }
 
     precomputation(){
-        let [viewPortWidth,viewPortHeight] = this.getViewport();
+        let [viewPortHeight,viewPortWidth] = this.getViewport();
         viewPortHeight *= (0.6);
         viewPortWidth *= (0.7);
 
@@ -40,19 +70,50 @@ class Board extends React.Component {
         const endY = parseInt(yNodes*(0.5));
         return {startX,startY,endX,endY,xNodes,yNodes,sideLength};
     }
+    recomputation(){
+        let {viewPortHeight,viewPortWidth} = this.state;
+        viewPortHeight *= (0.6);
+        viewPortWidth *= (0.7);
 
-    getInitialGrid(xNodes,yNodes){
-    
+        const sideLength = ((viewPortHeight*(6.5))/100)  ;
+        const xNodes = parseInt(viewPortWidth/sideLength);
+        const yNodes = parseInt(viewPortHeight/sideLength);
+
+        const startX = parseInt(xNodes*(0.3));
+        const startY = parseInt(yNodes*(0.5)); 
+        const endX = parseInt(xNodes*(0.7));
+        const endY = parseInt(yNodes*(0.5));
+        const nodes = this.getInitialGrid(xNodes,yNodes,startX,startY,endX,endY);
+        this.setState({startX,startY,endX,endY,xNodes,yNodes,sideLength,nodes});
+    }
+
+    getInitialGrid(xNodes,yNodes,startX,startY,endX,endY){
+        // console.log('called to rerender');
         const nodes = [];
         for(let row = 0 ; row < yNodes ; row++){
             const currentRow = [];
             for(let col = 0; col < xNodes; col++){
-                const currentNode = this.createNode(row,col);
+                const currentNode = this.createNode(row,col,startX,startY,endX,endY);
                 currentRow.push(currentNode);
             }
             nodes.push(currentRow);
         }
         return nodes;
+    }
+    createNode = (i,j,startX,startY,endX,endY) =>{
+        // console.log(this.state,'createNode')
+        // const {startX,startY,endX,endY} = this.state;
+        const isStart = (j === startX && i === startY ? true : false);
+        const  isEnd = j === endX && i === endY ? true : false
+        const node = {
+            row:i,
+            col:j,
+            isStart:isStart,
+            isEnd:isEnd,
+            isVisited:false,
+            isWall:false
+        }
+        return node;
     }
     
     onMouseDown = (row,col) =>{
@@ -112,8 +173,8 @@ class Board extends React.Component {
     }
     
     visualizeAlgorithm = () =>{
-
-        const path = algorithmBFS(this.state);
+        const {isSelectedAlgorithm} = this.state;
+        const path = algorithmList[isSelectedAlgorithm](this.state);
         for(let i = 0;i<path.length;i++){
             setTimeout( () =>{
                 this.createNewGrid(path[i]);
@@ -125,7 +186,7 @@ class Board extends React.Component {
     createNewGrid = (value) =>{
         const i = value[0];
         const j = value[1];
-        const {nodes,yNodes,xNodes,startX} = this.state;
+        const {nodes,yNodes,xNodes} = this.state;
         
         if(i < yNodes && j< xNodes && i>=0 && j>=0 && !nodes[i][j].isStart){
             
@@ -133,55 +194,52 @@ class Board extends React.Component {
         }
         this.setState({nodes});
     }
+
     
-    createNode = (i,j) =>{
-        const {startX,startY,endX,endY} = this.state;
-        const isStart = (j === startX && i === startY ? true : false);
-        const  isEnd = j === endX && i === endY ? true : false
-        const node = {
-            row:i,
-            col:j,
-            isStart:isStart,
-            isEnd:isEnd,
-            isVisited:false,
-            isWall:false
-        }
-        return node;
-}
+    selectThisAlgorithm = (algorithm) =>{
+
+        this.setState({isSelectedAlgorithm:algorithm});
+    }
 
     render(){
-
-       
+        console.log('full Render')
         const {nodes} = this.state;
         return (
-            <div>
-            <button onClick = {this.visualizeAlgorithm}>Visualize</button>
-            <table className = 'mainGrid'>
-                <tbody>
-                    {nodes.map( (row,i) => {
-                        return <tr key = {i}>
-                            {row.map((node,j) => {
-                                const {row,col,isStart,isEnd,isVisited,isWall} = node;
-                                return <Node 
-                                    key = {`${i} + ${j}`}
-                                    row = {row}
-                                    col = {col}
-                                    sideLength = {this.state.sideLength}
-                                    isStart = {isStart}
-                                    isEnd = {isEnd}
-                                    isWall = {isWall}
-                                    isVisited = {isVisited}
-                                    onMouseDown = {this.onMouseDown}
-                                    onMouseEnter = {this.onMouseEnter}
-                                    onMouseLeave = {this.onMouseLeave}
-                                    onMouseUp = {this.onMouseUp}
-                                />
-                                })
-                            }
-                        </tr>
-                    })}
-                </tbody>
-            </table>
+            <div className="screen">
+            <Header onClickVisualize = {this.visualizeAlgorithm}>Visualize</Header>
+            <div className="mainArea">
+                <AlgorithmList
+                    algorithmList = {algorithmList}
+                    isSelectedAlgorithm = {this.state.isSelectedAlgorithm}
+                    selectThisAlgorithm = {this.selectThisAlgorithm}
+                />
+                <table className = 'mainGrid'>
+                    <tbody>
+                        {nodes.map( (row,i) => {
+                            return <tr key = {i}>
+                                {row.map((node,j) => {
+                                    const {row,col,isStart,isEnd,isVisited,isWall} = node;
+                                    return <Node 
+                                        key = {`${i} + ${j}`}
+                                        row = {row}
+                                        col = {col}
+                                        sideLength = {this.state.sideLength}
+                                        isStart = {isStart}
+                                        isEnd = {isEnd}
+                                        isWall = {isWall}
+                                        isVisited = {isVisited}
+                                        onMouseDown = {this.onMouseDown}
+                                        onMouseEnter = {this.onMouseEnter}
+                                        onMouseLeave = {this.onMouseLeave}
+                                        onMouseUp = {this.onMouseUp}
+                                    />
+                                    })
+                                }
+                            </tr>
+                        })}
+                    </tbody>
+                </table>
+            </div>
             </div>
         )
     }
