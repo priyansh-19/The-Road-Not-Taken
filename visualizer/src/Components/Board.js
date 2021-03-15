@@ -3,14 +3,16 @@ import Node from './Node';
 import '../Styles/Board.css'
 import Header from './Header'
 import AlgorithmList from './AlgorithmList';
-import {algorithmBFS} from '../Algorithms/BFS'
-
+import {algorithmBFS} from '../Algorithms/BFS';
+import {algorithmDFS} from '../Algorithms/DFS';
+import { algorithmDijkstras } from '../Algorithms/Dijkstras';
+import {algorithmAstar} from '../Algorithms/Astar';
 
 const algorithmList = {
-Dijkstras:algorithmBFS,
+Dijkstras:algorithmDijkstras,
 BFS:algorithmBFS,
-DFS:algorithmBFS,
-Swarm:algorithmBFS,
+DFS:algorithmDFS,
+Astar:algorithmAstar,
 };
 
 class Board extends React.Component {
@@ -100,6 +102,16 @@ class Board extends React.Component {
         }
         return nodes;
     }
+    clearPath = (value) =>{
+        const {nodes} = this.state;
+        nodes.forEach( (row)=>{
+            row.forEach((node)=>{
+                if(value === 'path') { node.isVisited = false; node.isShortestPathNode = false; }
+                if(value === 'walls') node.isWall = false;
+            })
+        })
+        this.setState({nodes});
+    }
     createNode = (i,j,startX,startY,endX,endY) =>{
         // console.log(this.state,'createNode')
         // const {startX,startY,endX,endY} = this.state;
@@ -111,7 +123,8 @@ class Board extends React.Component {
             isStart:isStart,
             isEnd:isEnd,
             isVisited:false,
-            isWall:false
+            isWall:false,
+            isShortestPathNode:false,
         }
         return node;
     }
@@ -173,24 +186,34 @@ class Board extends React.Component {
     }
     
     visualizeAlgorithm = () =>{
+        this.clearPath('path');
         const {isSelectedAlgorithm} = this.state;
-        const path = algorithmList[isSelectedAlgorithm](this.state);
+        const paths = algorithmList[isSelectedAlgorithm](this.state);
+        const path = paths[0];
+        const shortestPath = paths[1];
+        const ms = 40;
         for(let i = 0;i<path.length;i++){
             setTimeout( () =>{
-                this.createNewGrid(path[i]);
-                //could also fetch element and make changes in dom
-            }, i*(20))
+                this.createNewGrid(path[i],0);
+            }, i*(ms));
+        }
+        const timeElaspsed = path.length*ms;
+        for(let i = 0;i<shortestPath.length;i++){
+            setTimeout( () =>{
+                this.createNewGrid(shortestPath[i],1);
+            }, timeElaspsed + i*(ms/2));
         }
     }
 
-    createNewGrid = (value) =>{
-        const i = value[0];
-        const j = value[1];
+    createNewGrid = (node,renderState) =>{
+        const i = node[0];
+        const j = node[1];
         const {nodes,yNodes,xNodes} = this.state;
         
         if(i < yNodes && j< xNodes && i>=0 && j>=0 && !nodes[i][j].isStart){
             
-            nodes[i][j].isVisited = true;
+            if(renderState == 0 ) { nodes[i][j].isVisited = true; nodes[i][j].isShortestPathNode = false; }
+            else if(renderState == 1) {nodes[i][j].isShortestPathNode = true; nodes[i][j].isVisited = false; }
         }
         this.setState({nodes});
     }
@@ -202,12 +225,16 @@ class Board extends React.Component {
     }
 
     render(){
-        console.log('full Render')
+        // console.log('full Render')
         const {nodes} = this.state;
         return (
             <div className="screen">
-            <Header onClickVisualize = {this.visualizeAlgorithm}>Visualize</Header>
+            <Header 
+            onClickVisualize = {this.visualizeAlgorithm}
+            clear = {this.clearPath}
+            >Visualize</Header>
             <div className="mainArea">
+                {/* <button onClick = {this.clearPath}>ClearPath</button> */}
                 <AlgorithmList
                     algorithmList = {algorithmList}
                     isSelectedAlgorithm = {this.state.isSelectedAlgorithm}
@@ -218,7 +245,7 @@ class Board extends React.Component {
                         {nodes.map( (row,i) => {
                             return <tr key = {i}>
                                 {row.map((node,j) => {
-                                    const {row,col,isStart,isEnd,isVisited,isWall} = node;
+                                    const {row,col,isStart,isEnd,isVisited,isWall,isShortestPathNode} = node;
                                     return <Node 
                                         key = {`${i} + ${j}`}
                                         row = {row}
@@ -228,6 +255,7 @@ class Board extends React.Component {
                                         isEnd = {isEnd}
                                         isWall = {isWall}
                                         isVisited = {isVisited}
+                                        isShortestPathNode = {isShortestPathNode}
                                         onMouseDown = {this.onMouseDown}
                                         onMouseEnter = {this.onMouseEnter}
                                         onMouseLeave = {this.onMouseLeave}

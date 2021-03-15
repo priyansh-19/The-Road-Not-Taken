@@ -1,6 +1,8 @@
 .node{
     /* background-color: antiquewhite; */
-    border: 1px solid steelblue
+    border: 1px solid steelblue;
+    transition : all 0.3s; 
+    /* background-color: black; */
   
 }
 .isStart{
@@ -35,42 +37,56 @@
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
     animation-play-state: running; 
+    /* border: 1px white solid; */
 
+}
+.isWall{
+  /* background-color: black; */
+  animation-name: wallAnimation;
+  animation-duration: 0.3s; 
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running; 
+
+}
+.shortestPathNode{
+  /* background-color:rgba(0, 190, 218, 0.75); */
+  background-color: rgba(251, 253, 110, 0.979);
+  animation-name: shortestPathNodeAnimation;
+  animation-duration: 1.2s; 
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running; 
 }
 @keyframes visitedAnimation {
     0% {
       transform: scale(0.3);
-      background-color: rgba(0, 0, 66, 0.75);
+      background-color: rgba(250, 132, 214, 0.979);
       border-radius: 100%;
     }
   
     50% {
-      background-color: rgba(17, 104, 217, 0.75);
+      background-color: rgba(32, 193, 238, 0.837);
     }
   
     75% {
       transform: scale(1.2);
-      background-color: rgba(0, 217, 159, 0.75);
+      background-color: rgba(34, 227, 230, 0.75);
     }
   
     100% {
       transform: scale(1);
-      background-color: rgba(0, 190, 218, 0.75);
+      background-color: rgba(98, 245, 230, 0.823);
     }
   }
 
-  .isWall{
-    /* background-color: black; */
-    animation-name: wallAnimation;
-    animation-duration: 0.3s; 
-    animation-timing-function: ease-out;
-    animation-delay: 0;
-    animation-direction: alternate;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-    animation-play-state: running; 
-
-  }
+  
   @keyframes wallAnimation {
     0%{
       transform: scale(0);
@@ -117,5 +133,28 @@
       transform: scale(1);
       background-color: rgb(243, 116, 194);
 
+    }
+  }
+  @keyframes shortestPathNodeAnimation{
+    0% {
+      transform: scale(0.3);
+      background-color: rgba(248, 54, 103, 0.979);
+      border-radius: 100%;
+    }
+  
+    50% {
+      background-color: rgba(251, 253, 110, 0.979);
+
+    }
+  
+    75% {
+      transform: scale(1.2);
+      background-color: rgba(73, 231, 136, 0.75);
+    }
+  
+    100% {
+      transform: scale(1);
+      background-color: rgba(251, 253, 110, 0.979);
+      /* background-color: rgba(245, 235, 98, 0.823); */
     }
   }

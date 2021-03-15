@@ -4,17 +4,17 @@
     flex-direction: column;
     height: 100vh;;
 }
-
-.mainGrid{
-    border-collapse: collapse;
+.mainArea{
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     height: 100%;
 }
-.mainArea{
+
+.mainGrid{
+    border-collapse: collapse;
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
     height: 100%;

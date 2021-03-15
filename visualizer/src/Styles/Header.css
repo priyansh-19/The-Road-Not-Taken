@@ -19,12 +19,17 @@ body {
   align-items: center;
 }
 .headerOptions2 {
-  background-color: rgb(115, 210, 236);
+  position:relative;
+  background-color: rgb(104, 206, 235);
+  /* background-color: rgba(47, 230, 224, 0.728); */
   width: 100%;
   height: 60%;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+  /* justify-content: space-around; */
 }
 .headerTitle {
   color: white;
@@ -32,14 +37,37 @@ body {
   font-size: 1.2em;
   margin-left: 30px;
 }
-.goButton {
+.clearButton{
+  
   transition:  0.2s ease-in;
-  padding: 7px;
+  cursor: pointer;
+  margin-left: 100px;
+  align-self: center;
+  /* padding: 2px;
+  padding-bottom: 4px;
+  padding-left: 12px;
+  padding-right: 12px; */
+  font-size: 22px;
+  font-family: Gill Sans, 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;;
+  /* font-weight: 100; */
+  /* background-color: rgb(47, 47, 47); */
+  color: rgb(0, 0, 0);
+  border-radius: 5px;
+  border-style: none;
+  border: none;
+
+}
+.goButton {
+  position: absolute;
+  transition:  0.2s ease-in;
+  align-self: center;
+  left: 48%;
+  padding-bottom: 4px;
   padding-left: 12px;
   padding-right: 12px;
-  font-size: 30px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-weight: 400;
+  font-size: 40px;
+  font-family: Gill Sans, 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;;
+  font-weight: 100;
   background-color: black;
   color: rgb(241, 241, 241);
   border-radius: 5px;
@@ -51,3 +79,22 @@ body {
     cursor: pointer;
    
 }
+.goButton:active{
+
+  box-shadow: 0 0 5px -1px rgba(0,0,0,0.6);
+}
+.clearButton:hover{
+  /* color:  rgb(220, 7, 7); */
+  cursor: pointer;
+  text-shadow: crimson 2px ;
+}
+.clearButton:active{
+  animation: blink 1s ;
+}
+
+@keyframes blink{
+  30% {
+    opacity: 0;
+  }
+}
+

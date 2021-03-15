@@ -5,7 +5,7 @@ class Node extends React.Component {
 
     render(){
       
-        const {sideLength,isStart,isEnd,isVisited,row,col,onMouseEnter,onMouseLeave,onMouseDown,onMouseUp,isWall} = this.props;
+        const {sideLength,isStart,isEnd,isVisited,row,col,onMouseEnter,onMouseLeave,onMouseDown,onMouseUp,isWall,isShortestPathNode} = this.props;
         const addClass = (isStart) ? 'isStart' : isEnd ? 'isEnd' : isWall ? 'isWall' : '';
         const divStyle = {
             height : `${sideLength}px`,
@@ -14,7 +14,7 @@ class Node extends React.Component {
        
         return(
             <td 
-            className = {`node ${isVisited ? 'visited' : ''} ${addClass}`}
+            className = {`node ${isVisited ? 'visited' : isShortestPathNode ? 'shortestPathNode':''} ${addClass}`}
             id = {`${row}${col}`}
             style = {divStyle}
             onMouseEnter = {() => onMouseEnter(row,col)}
