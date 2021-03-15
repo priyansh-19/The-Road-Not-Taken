@@ -1,28 +1,37 @@
 import React from 'react';
-import '../Styles/Node.css'
+import '../Styles/Node.css';
+import lowWeight from '../images/tree.png';
+
 class Node extends React.Component {
  
 
     render(){
       
-        const {sideLength,isStart,isEnd,isVisited,row,col,onMouseEnter,onMouseLeave,onMouseDown,onMouseUp,isWall,isShortestPathNode} = this.props;
-        const addClass = (isStart) ? 'isStart' : isEnd ? 'isEnd' : isWall ? 'isWall' : '';
+        const {sideLength,isStart,isEnd,isVisited,row,col,onMouseEnter,onMouseLeave,onMouseDown,onMouseUp,isWall,isShortestPathNode,isWeighted} = this.props;
+        const addClass = (isStart) ? 'isStart' : isEnd ? 'isEnd' : isWall ? 'isWall' : isWeighted ? '' : ''
         const divStyle = {
             height : `${sideLength}px`,
             width : `${sideLength}px`,
         }
-       
+    //    console.log(imgSrcLowWeight);
         return(
             <td 
             className = {`node ${isVisited ? 'visited' : isShortestPathNode ? 'shortestPathNode':''} ${addClass}`}
             id = {`${row}${col}`}
             style = {divStyle}
-            onMouseEnter = {() => onMouseEnter(row,col)}
-            onMouseDown = {() => onMouseDown(row,col)}
-            onMouseLeave = {() => onMouseLeave(row,col  )}
+            onMouseEnter = {(e) => onMouseEnter(row,col,e)}
+            onMouseDown = {(e) => onMouseDown(row,col,e)}
+            onMouseLeave = {(e) => onMouseLeave(row,col,e)}
             onMouseUp = {() => onMouseUp(row,col)}
             >
-            </td>
+            {
+                <div className = 'imageContainer'>
+                {(isWeighted && !isWall && !isStart && !isEnd) ? 
+                        <img className = 'weightImage' src = {isWeighted ? lowWeight: ''} onError = {(e) => {e.target.style.display='none'}}/>
+                : null}
+                </div>
+            }    
+        </td>
         )
     }
 }

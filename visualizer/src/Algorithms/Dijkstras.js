@@ -11,6 +11,7 @@ export const algorithmDijkstras = (values) =>{
     distance[startY][startX] = 0;
     q1.push([0,startY,startX]);
     parent[startY][startX] = [startY,startX];
+    let found = false;
 
     while(q1.length !== 0){
         q1.sort( (a,b) =>{
@@ -22,6 +23,7 @@ export const algorithmDijkstras = (values) =>{
         q1.shift();
 
         if(i === endY && j === endX){
+            found = true;
             break;
         }
         path.push([i,j]);
@@ -32,7 +34,7 @@ export const algorithmDijkstras = (values) =>{
             if(newX < xNodes && newX >=0 && newY < yNodes && newY >=0 && !vis[newY][newX] && !nodes[newY][newX].isWall){
                const adjNodeDistance = distance[newY][newX];
                const currentDistance = distance[i][j];
-               const newDistance  = currentDistance + 1;
+               const newDistance  = currentDistance + nodes[newY][newX].weight;
                if(newDistance < adjNodeDistance){
                    q1.push([newDistance,newY,newX]);
                    distance[newY][newX] = newDistance;
@@ -42,7 +44,8 @@ export const algorithmDijkstras = (values) =>{
         }
         vis[i][j] = true;
     }
-
+ 
+    if(!found){return [path,[]];}
     let currentY = endY;
     let currentX = endX;
     while(parent[currentY][currentX][0] !== currentY ||  parent[currentY][currentX][1] !== currentX){

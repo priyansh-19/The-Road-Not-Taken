@@ -2,6 +2,10 @@
     /* background-color: antiquewhite; */
     border: 1px solid steelblue;
     transition : all 0.3s; 
+    
+    align-items: center;
+    justify-content: center;
+
     /* background-color: black; */
   
 }
@@ -38,10 +42,10 @@
     animation-fill-mode: forwards;
     animation-play-state: running; 
     /* border: 1px white solid; */
-
 }
 .isWall{
   /* background-color: black; */
+  transition: all 0.3s;
   animation-name: wallAnimation;
   animation-duration: 0.3s; 
   animation-timing-function: ease-out;
@@ -63,6 +67,8 @@
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-play-state: running; 
+}.isWeighted{
+  background-color: rgba(253, 110, 122, 0.979);
 }
 @keyframes visitedAnimation {
     0% {
@@ -79,7 +85,7 @@
       transform: scale(1.2);
       background-color: rgba(34, 227, 230, 0.75);
     }
-  
+
     100% {
       transform: scale(1);
       background-color: rgba(98, 245, 230, 0.823);
@@ -158,3 +164,52 @@
       /* background-color: rgba(245, 235, 98, 0.823); */
     }
   }
+
+  .imageContainer{
+    position: relative;
+    max-height: 100%;
+    max-width: 100% ;
+    height: inherit;
+    width: inherit;
+    align-items: center;
+    justify-content: center;
+  }
+  .weightImage{
+    position: absolute;
+    animation-name: addImage;
+    animation-duration: 0.5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running; 
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    /* max-width: inherit; */
+    /* max-height: inherit; */
+    height: 40px;
+    width: 20px ;
+    bottom: 10px;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+       user-select: none;
+  }
+  @keyframes addImage{
+    0%{
+     transform: scale(0.3);
+      /* background-color: lavender; */
+    }
+    50%{
+     
+    }
+    75%{
+      transform: scale(1.2);
+    }
+    100%{
+      transform : scale(1);
+      /* background-color: lightblue; */
+    }
+  }
+  

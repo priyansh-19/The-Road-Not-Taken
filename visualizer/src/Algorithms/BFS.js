@@ -11,6 +11,7 @@
         q1.push([startY,startX]);
         q1.push([-1,-1]);
         parent[startY][startX] = [startY,startX];
+        let found = false;
 
         while(q1.length !== 0){
             const currentNode = q1[0];
@@ -23,7 +24,7 @@
             }
             const i = currentNode[0];
             const j = currentNode[1];
-            if(i === endY && j === endX){break;}
+            if(i === endY && j === endX){ found = true; break;}
             path.push([i,j]);
             vis[i][j] = 1;
 
@@ -41,7 +42,7 @@
                 }
             }
         }
-     
+        if(!found){return [path,[]];}
         let currentY = endY;
         let currentX = endX;
         while(parent[currentY][currentX][0] !== currentY ||  parent[currentY][currentX][1] !== currentX){

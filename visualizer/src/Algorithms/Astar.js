@@ -2,7 +2,7 @@
 
 const heuristic = (i,j,ei,ej) =>{
     //this is the manhattan heuristic 
-    return (Math.abs(ei-i) + Math.abs(ej - j) )*2;
+    return (Math.abs(ei-i) + Math.abs(ej - j) )*(1.2);
 }
 
 export const algorithmAstar = (values) =>{
@@ -26,7 +26,7 @@ export const algorithmAstar = (values) =>{
 
     q1.push([distance[startY][startX].f,startY,startX]);
     parent[startY][startX] = [startY,startX];
-
+    let found = false;
     while(q1.length !== 0){
         q1.sort( (a,b) =>{
             return a[0] - b[0];
@@ -37,6 +37,7 @@ export const algorithmAstar = (values) =>{
         q1.shift();
         
         if(i === endY && j === endX){
+            found = true;
             break;
         }
         path.push([i,j]);
@@ -46,7 +47,7 @@ export const algorithmAstar = (values) =>{
             const newX = adj[k][1] + j;
           
             if(newX < xNodes && newX >=0 && newY < yNodes && newY >=0 && !vis[newY][newX] && !nodes[newY][newX].isWall){
-                const gNew = distance[i][j].g + 1;
+                const gNew = distance[i][j].g + nodes[newY][newX].weight;
                 const hNew = heuristic(newY,newX,endY,endX);
                 const fNew = gNew + hNew;
                 const fOld = distance[newY][newX].f;
@@ -59,6 +60,7 @@ export const algorithmAstar = (values) =>{
         }
         vis[i][j] = true;
     }
+    if(!found){return [path,[]];}
     let currentY = endY;
     let currentX = endX;
     while(parent[currentY][currentX][0] !== currentY ||  parent[currentY][currentX][1] !== currentX){

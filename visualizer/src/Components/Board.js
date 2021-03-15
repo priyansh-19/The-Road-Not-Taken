@@ -7,6 +7,8 @@ import {algorithmBFS} from '../Algorithms/BFS';
 import {algorithmDFS} from '../Algorithms/DFS';
 import { algorithmDijkstras } from '../Algorithms/Dijkstras';
 import {algorithmAstar} from '../Algorithms/Astar';
+// import lowWeight from '../images/lowWeight.png';
+// console.log(lowWeight);
 
 const algorithmList = {
 Dijkstras:algorithmDijkstras,
@@ -28,12 +30,15 @@ class Board extends React.Component {
             sideLength,
             xNodes,
             yNodes,
+            selectedWeight:4,
             isMouseClicked:false,
+            isMouseClickedFor:'',
             moveStart:false,
             moveEnd:false,
             isSelectedAlgorithm:'BFS',
             viewPortWidth:window.innerWidth,
             viewPortHeight:window.innerHeight,
+            // imgSrcLowWeight : '../images/lowWeight.png',
             nodes:[]
         });
         //  console.log(this.state);
@@ -113,8 +118,7 @@ class Board extends React.Component {
         this.setState({nodes});
     }
     createNode = (i,j,startX,startY,endX,endY) =>{
-        // console.log(this.state,'createNode')
-        // const {startX,startY,endX,endY} = this.state;
+        
         const isStart = (j === startX && i === startY ? true : false);
         const  isEnd = j === endX && i === endY ? true : false
         const node = {
@@ -125,37 +129,57 @@ class Board extends React.Component {
             isVisited:false,
             isWall:false,
             isShortestPathNode:false,
+            isWeighted:false,
+            weight:1,
+            // imgSrcLowWeight:this.state.imgSrcLowWeight,
         }
         return node;
     }
     
-    onMouseDown = (row,col) =>{
+    onMouseDown = (row,col,e) =>{
         const nodes = this.state.nodes;
-       
         if(nodes[row][col].isStart){
             this.setState({nodes,isMouseClicked:true,moveStart:true});
-
         }
         else if(nodes[row][col].isEnd){
             this.setState({nodes,isMouseClicked:true,moveEnd:true});
         }
+        else if(e.ctrlKey){
+            nodes[row][col].isWall = false;
+            nodes[row][col].weight = this.state.selectedWeight;
+            nodes[row][col].isWeighted ^= 1;
+            this.setState({nodes,isMouseClicked:true,isMouseClickedFor:'weight'});
+
+        }
         else{
-        nodes[row][col].isWall = true;
-        this.setState({nodes,isMouseClicked:true});
+        nodes[row][col].isWall ^= 1;
+        nodes[row][col].isWeighted = false;
+        this.setState({nodes,isMouseClicked:true,isMouseClickedFor:'wall'});
         }
     }
 
-    onMouseEnter = (row,col) =>{
+    onMouseEnter = (row,col,e) =>{
+        console.log(this.state.isMouseClickedFor);
         if(!this.state.isMouseClicked){return;}
         const {nodes} = this.state;
+
         if(this.state.moveStart){
             nodes[row][col].isStart = true;
         }
         else if(this.state.moveEnd){
             nodes[row][col].isEnd = true;
         }
+        else if(e.ctrlKey && this.state.isMouseClickedFor === 'weight'){
+
+            nodes[row][col].isWall = false;
+            nodes[row][col].weight = this.state.selectedWeight;
+            nodes[row][col].isWeighted = true;
+        }
         else{
+        if(this.state.isMouseClickedFor !== 'wall'){return;}
         nodes[row][col].isWall = true;
+        nodes[row][col].isWeighted = false;
+
         }
         this.setState({nodes})
     }
@@ -181,10 +205,11 @@ class Board extends React.Component {
             this.setState({isMouseClicked:false,moveStart:false,moveEnd:false,endY:row,endX:col})
         }
         else{
+            // console.log('here');
             this.setState({isMouseClicked:false,moveStart:false,moveEnd:false})
         }
     }
-    
+   
     visualizeAlgorithm = () =>{
         this.clearPath('path');
         const {isSelectedAlgorithm} = this.state;
@@ -234,7 +259,6 @@ class Board extends React.Component {
             clear = {this.clearPath}
             >Visualize</Header>
             <div className="mainArea">
-                {/* <button onClick = {this.clearPath}>ClearPath</button> */}
                 <AlgorithmList
                     algorithmList = {algorithmList}
                     isSelectedAlgorithm = {this.state.isSelectedAlgorithm}
@@ -245,11 +269,13 @@ class Board extends React.Component {
                         {nodes.map( (row,i) => {
                             return <tr key = {i}>
                                 {row.map((node,j) => {
-                                    const {row,col,isStart,isEnd,isVisited,isWall,isShortestPathNode} = node;
+                                    const {row,col,isStart,isEnd,isVisited,isWall,isShortestPathNode,weight,isWeighted,imgSrcLowWeight} = node;
                                     return <Node 
                                         key = {`${i} + ${j}`}
                                         row = {row}
                                         col = {col}
+                                        weight = {weight}
+                                        isWeighted = {isWeighted}
                                         sideLength = {this.state.sideLength}
                                         isStart = {isStart}
                                         isEnd = {isEnd}
@@ -260,6 +286,7 @@ class Board extends React.Component {
                                         onMouseEnter = {this.onMouseEnter}
                                         onMouseLeave = {this.onMouseLeave}
                                         onMouseUp = {this.onMouseUp}
+                                        // imgSrcLowWeight = {imgSrcLowWeight }
                                     />
                                     })
                                 }
