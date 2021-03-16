@@ -1,3 +1,4 @@
+
 .node{
     /* background-color: antiquewhite; */
     border: 1px solid steelblue;
@@ -41,6 +42,7 @@
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
     animation-play-state: running; 
+    /* backface-visibility: hidden;   */
     /* border: 1px white solid; */
 }
 .isWall{
@@ -54,21 +56,28 @@
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-play-state: running; 
+  /* box-shadow: 3px 3px 1px  rgb(33, 174, 245), 3px 3px 6px  rgb(90, 90, 90); */
+  box-shadow: 2px 2px 1px  aqua, 2.5px 2.5px 6px  rgb(54, 54, 54);
+
 
 }
 .shortestPathNode{
   /* background-color:rgba(0, 190, 218, 0.75); */
   background-color: rgba(251, 253, 110, 0.979);
   animation-name: shortestPathNodeAnimation;
-  animation-duration: 1.2s; 
+  animation-duration: 1s; 
   animation-timing-function: ease-out;
   animation-delay: 0;
   animation-direction: alternate;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   animation-play-state: running; 
-}.isWeighted{
-  background-color: rgba(253, 110, 122, 0.979);
+}
+.isWeighted{
+  background-color: rgba(178, 247, 164, 0.646);
+  box-shadow: 3px 3px 2px  rgb(138, 137, 137), 3px 3px 6px  rgb(103, 103, 103);
+  border-radius: 200%;
+  /* width: 10%; */
 }
 @keyframes visitedAnimation {
     0% {
@@ -89,6 +98,8 @@
     100% {
       transform: scale(1);
       background-color: rgba(98, 245, 230, 0.823);
+      box-shadow: 1.5px 1.5px 2px  rgb(12, 12, 12);
+
     }
   }
 
@@ -160,10 +171,11 @@
   
     100% {
       transform: scale(1);
-      background-color: rgba(251, 253, 110, 0.979);
-      /* background-color: rgba(245, 235, 98, 0.823); */
+      background-color: rgba(252, 255, 45, 0.979);
+      box-shadow: 2px 2px 8px  rgb(41, 41, 41);
     }
   }
+ 
 
   .imageContainer{
     position: relative;
@@ -176,40 +188,54 @@
   }
   .weightImage{
     position: absolute;
-    animation-name: addImage;
-    animation-duration: 0.5s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-    animation-play-state: running; 
-    animation-timing-function: ease-out;
-    animation-delay: 0;
-    animation-direction: alternate;
-    /* max-width: inherit; */
-    /* max-height: inherit; */
-    height: 40px;
-    width: 20px ;
-    bottom: 10px;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -khtml-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-       user-select: none;
+    animation :  treeMovement 6s ease infinite 2s , addTree 0.5s ease-in-out;
+    height: 45px;
+    width:30px ;
+    bottom: 8px;
+    /* left:5px; */
+    /* right: 2px; */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
-  @keyframes addImage{
+  @keyframes treeMovement{
+    
     0%{
-     transform: scale(0.3);
-      /* background-color: lavender; */
+      transform:rotateZ(0deg);
+      transform-origin: bottom;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: subpixel-antialiased;
+
     }
-    50%{
-     
+    25%{
+      backface-visibility: hidden;
+      transform:rotateZ(-7deg);
+      transform-origin: bottom;
     }
     75%{
-      transform: scale(1.2);
+      backface-visibility: hidden;
+      transform:rotateZ(7deg);
+      transform-origin: bottom;
+      -webkit-font-smoothing: subpixel-antialiased;
     }
     100%{
-      transform : scale(1);
-      /* background-color: lightblue; */
+      transform:rotateZ(0deg);
+      transform-origin: bottom;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: subpixel-antialiased;
+    }
+  }
+  @keyframes addTree{
+    0%{
+      transform: scale(0.3);
+    }
+ 
+    100%{
+      transform: scale(1);
+      /* transform: rotateX(40deg); */
     }
   }
   

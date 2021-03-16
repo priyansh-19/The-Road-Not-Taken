@@ -1,6 +1,10 @@
 import React from 'react';
 import '../Styles/Node.css';
-import lowWeight from '../images/tree.png';
+import tree1 from '../images/tree4.png';
+import tree2 from '../images/tree4.png';
+import tree3 from '../images/tree4.png';
+import tree4 from '../images/tree4.png'
+import tree5 from '../images/tree4.png';
 
 class Node extends React.Component {
  
@@ -8,15 +12,16 @@ class Node extends React.Component {
     render(){
       
         const {sideLength,isStart,isEnd,isVisited,row,col,onMouseEnter,onMouseLeave,onMouseDown,onMouseUp,isWall,isShortestPathNode,isWeighted} = this.props;
-        const addClass = (isStart) ? 'isStart' : isEnd ? 'isEnd' : isWall ? 'isWall' : isWeighted ? '' : ''
+        const addClass = (isStart) ? 'isStart' : isEnd ? 'isEnd' : isWall ? 'isWall' : isWeighted ? 'isWeighted' : isVisited ? 'visited' : isShortestPathNode ?'isShortestPathNode': ''
         const divStyle = {
             height : `${sideLength}px`,
             width : `${sideLength}px`,
         }
-    //    console.log(imgSrcLowWeight);
+        let treeNumber = (((row*col) % 5)*row)%5;
+  
         return(
             <td 
-            className = {`node ${isVisited ? 'visited' : isShortestPathNode ? 'shortestPathNode':''} ${addClass}`}
+            className = {`node ${isVisited ? 'visited' : isShortestPathNode ? 'shortestPathNode':addClass} `}
             id = {`${row}${col}`}
             style = {divStyle}
             onMouseEnter = {(e) => onMouseEnter(row,col,e)}
@@ -27,7 +32,9 @@ class Node extends React.Component {
             {
                 <div className = 'imageContainer'>
                 {(isWeighted && !isWall && !isStart && !isEnd) ? 
-                        <img className = 'weightImage' src = {isWeighted ? lowWeight: ''} onError = {(e) => {e.target.style.display='none'}}/>
+                        <img className = 'weightImage' src = {isWeighted ? 
+                            treeNumber === 1 ? tree1 : treeNumber == 2 ? tree2 : treeNumber == 3 ? tree3 : treeNumber == 4 ? tree4 : tree5
+                        : ''} onError = {(e) => {e.target.style.display='none'}}/>
                 : null}
                 </div>
             }    

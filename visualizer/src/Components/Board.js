@@ -159,8 +159,9 @@ class Board extends React.Component {
     }
 
     onMouseEnter = (row,col,e) =>{
-        console.log(this.state.isMouseClickedFor);
-        if(!this.state.isMouseClicked){return;}
+        // console.log(this.state.isMouseClickedFor);
+        const {startY,endY,startX,endX} = this.state;
+        if(!this.state.isMouseClicked ){return;}
         const {nodes} = this.state;
 
         if(this.state.moveStart){
@@ -168,6 +169,9 @@ class Board extends React.Component {
         }
         else if(this.state.moveEnd){
             nodes[row][col].isEnd = true;
+        }
+        else if(row == startY && col == startX || row == endY && col == endX){
+            // do nothing
         }
         else if(e.ctrlKey && this.state.isMouseClickedFor === 'weight'){
 
