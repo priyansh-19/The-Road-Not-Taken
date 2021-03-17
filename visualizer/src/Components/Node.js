@@ -11,8 +11,30 @@ class Node extends React.Component {
 
     render(){
       
-        const {sideLength,isStart,isEnd,isVisited,row,col,onMouseEnter,onMouseLeave,onMouseDown,onMouseUp,isWall,isShortestPathNode,isWeighted} = this.props;
-        const addClass = (isStart) ? 'isStart' : isEnd ? 'isEnd' : isWall ? 'isWall' : isWeighted ? 'isWeighted' : isVisited ? 'visited' : isShortestPathNode ?'isShortestPathNode': ''
+        const {sideLength,
+            isStart,
+            isEnd,
+            isVisited,
+            row,
+            col,
+            onMouseEnter,
+            onMouseLeave,
+            onMouseDown,
+            onMouseUp,
+            isWall,
+            isShortestPathNode,
+            isWeighted 
+            } = this.props;
+
+        const addClass = 
+            isStart ? 'isStart' :
+                isEnd ? 'isEnd' :
+                    isWall ? 'isWall' :
+                        isWeighted && isVisited? 'isWeighted visited' :
+                            isWeighted && isShortestPathNode ? 'isWeighted shortestPathNode':
+                                isWeighted ? 'isWeighted' :
+                                    isVisited ?  'visited' :
+                                        isShortestPathNode ? 'shortestPathNode': ''
         const divStyle = {
             height : `${sideLength}px`,
             width : `${sideLength}px`,
@@ -21,7 +43,7 @@ class Node extends React.Component {
   
         return(
             <td 
-            className = {`node ${isVisited ? 'visited' : isShortestPathNode ? 'shortestPathNode':addClass} `}
+            className = {`node ${addClass}`} 
             id = {`${row}${col}`}
             style = {divStyle}
             onMouseEnter = {(e) => onMouseEnter(row,col,e)}

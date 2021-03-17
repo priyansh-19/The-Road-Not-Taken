@@ -7,8 +7,6 @@ import {algorithmBFS} from '../Algorithms/BFS';
 import {algorithmDFS} from '../Algorithms/DFS';
 import { algorithmDijkstras } from '../Algorithms/Dijkstras';
 import {algorithmAstar} from '../Algorithms/Astar';
-// import lowWeight from '../images/lowWeight.png';
-// console.log(lowWeight);
 
 const algorithmList = {
 Dijkstras:algorithmDijkstras,
@@ -38,10 +36,8 @@ class Board extends React.Component {
             isSelectedAlgorithm:'BFS',
             viewPortWidth:window.innerWidth,
             viewPortHeight:window.innerHeight,
-            // imgSrcLowWeight : '../images/lowWeight.png',
             nodes:[]
         });
-        //  console.log(this.state);
     }
    
     getViewport = () =>{
@@ -77,6 +73,7 @@ class Board extends React.Component {
         const endY = parseInt(yNodes*(0.5));
         return {startX,startY,endX,endY,xNodes,yNodes,sideLength};
     }
+    
     recomputation(){
         let {viewPortHeight,viewPortWidth} = this.state;
         viewPortHeight *= (0.6);
@@ -93,48 +90,6 @@ class Board extends React.Component {
         const nodes = this.getInitialGrid(xNodes,yNodes,startX,startY,endX,endY);
         this.setState({startX,startY,endX,endY,xNodes,yNodes,sideLength,nodes});
     }
-
-    getInitialGrid(xNodes,yNodes,startX,startY,endX,endY){
-        // console.log('called to rerender');
-        const nodes = [];
-        for(let row = 0 ; row < yNodes ; row++){
-            const currentRow = [];
-            for(let col = 0; col < xNodes; col++){
-                const currentNode = this.createNode(row,col,startX,startY,endX,endY);
-                currentRow.push(currentNode);
-            }
-            nodes.push(currentRow);
-        }
-        return nodes;
-    }
-    clearPath = (value) =>{
-        const {nodes} = this.state;
-        nodes.forEach( (row)=>{
-            row.forEach((node)=>{
-                if(value === 'path') { node.isVisited = false; node.isShortestPathNode = false; }
-                if(value === 'walls') node.isWall = false;
-            })
-        })
-        this.setState({nodes});
-    }
-    createNode = (i,j,startX,startY,endX,endY) =>{
-        
-        const isStart = (j === startX && i === startY ? true : false);
-        const  isEnd = j === endX && i === endY ? true : false
-        const node = {
-            row:i,
-            col:j,
-            isStart:isStart,
-            isEnd:isEnd,
-            isVisited:false,
-            isWall:false,
-            isShortestPathNode:false,
-            isWeighted:false,
-            weight:1,
-            // imgSrcLowWeight:this.state.imgSrcLowWeight,
-        }
-        return node;
-    }
     
     onMouseDown = (row,col,e) =>{
         const nodes = this.state.nodes;
@@ -146,6 +101,7 @@ class Board extends React.Component {
         }
         else if(e.ctrlKey){
             nodes[row][col].isWall = false;
+            nodes[row][col].isVisited = false;
             nodes[row][col].weight = this.state.selectedWeight;
             nodes[row][col].isWeighted ^= 1;
             this.setState({nodes,isMouseClicked:true,isMouseClickedFor:'weight'});
@@ -154,12 +110,12 @@ class Board extends React.Component {
         else{
         nodes[row][col].isWall ^= 1;
         nodes[row][col].isWeighted = false;
+        nodes[row][col].isVisited = false;
         this.setState({nodes,isMouseClicked:true,isMouseClickedFor:'wall'});
         }
     }
 
     onMouseEnter = (row,col,e) =>{
-        // console.log(this.state.isMouseClickedFor);
         const {startY,endY,startX,endX} = this.state;
         if(!this.state.isMouseClicked ){return;}
         const {nodes} = this.state;
@@ -176,6 +132,7 @@ class Board extends React.Component {
         else if(e.ctrlKey && this.state.isMouseClickedFor === 'weight'){
 
             nodes[row][col].isWall = false;
+            nodes[row][col].isVisited = false;
             nodes[row][col].weight = this.state.selectedWeight;
             nodes[row][col].isWeighted = true;
         }
@@ -209,11 +166,54 @@ class Board extends React.Component {
             this.setState({isMouseClicked:false,moveStart:false,moveEnd:false,endY:row,endX:col})
         }
         else{
-            // console.log('here');
             this.setState({isMouseClicked:false,moveStart:false,moveEnd:false})
         }
     }
+
+    getInitialGrid(xNodes,yNodes,startX,startY,endX,endY){
+        const nodes = [];
+        for(let row = 0 ; row < yNodes ; row++){
+            const currentRow = [];
+            for(let col = 0; col < xNodes; col++){
+                const currentNode = this.createNode(row,col,startX,startY,endX,endY);
+                currentRow.push(currentNode);
+            }
+            nodes.push(currentRow);
+        }
+        return nodes;
+    }
    
+    createNode = (i,j,startX,startY,endX,endY) =>{
+        
+        const isStart = (j === startX && i === startY ? true : false);
+        const  isEnd = j === endX && i === endY ? true : false
+        const node = {
+            row:i,
+            col:j,
+            isStart:isStart,
+            isEnd:isEnd,
+            isVisited:false,
+            isWall:false,
+            isShortestPathNode:false,
+            isWeighted:false,
+            weight:1,
+        }
+        return node;
+    }
+
+    createNewGrid = (node,renderState) =>{
+        const i = node[0];
+        const j = node[1];
+        const {nodes,yNodes,xNodes} = this.state;
+        
+        if(i < yNodes && j< xNodes && i>=0 && j>=0 && !nodes[i][j].isStart){
+            
+            if(renderState == 0 ) { nodes[i][j].isVisited = true; nodes[i][j].isShortestPathNode = false; }
+            else if(renderState == 1) {nodes[i][j].isShortestPathNode = true; nodes[i][j].isVisited = false; }
+        }
+        this.setState({nodes});
+    }
+
     visualizeAlgorithm = () =>{
         this.clearPath('path');
         const {isSelectedAlgorithm} = this.state;
@@ -234,27 +234,24 @@ class Board extends React.Component {
         }
     }
 
-    createNewGrid = (node,renderState) =>{
-        const i = node[0];
-        const j = node[1];
-        const {nodes,yNodes,xNodes} = this.state;
-        
-        if(i < yNodes && j< xNodes && i>=0 && j>=0 && !nodes[i][j].isStart){
-            
-            if(renderState == 0 ) { nodes[i][j].isVisited = true; nodes[i][j].isShortestPathNode = false; }
-            else if(renderState == 1) {nodes[i][j].isShortestPathNode = true; nodes[i][j].isVisited = false; }
-        }
-        this.setState({nodes});
-    }
-
-    
     selectThisAlgorithm = (algorithm) =>{
 
         this.setState({isSelectedAlgorithm:algorithm});
     }
 
+    clearPath = (value) =>{
+        const {nodes} = this.state;
+        nodes.forEach( (row)=>{
+            row.forEach((node)=>{
+                if(value === 'path') { node.isVisited = false; node.isShortestPathNode = false; }
+                if(value === 'walls') node.isWall = false;
+            })
+        })
+        this.setState({nodes});
+    }
+
     render(){
-        // console.log('full Render')
+        console.log('full Render')
         const {nodes} = this.state;
         return (
             <div className="screen">
@@ -273,7 +270,7 @@ class Board extends React.Component {
                         {nodes.map( (row,i) => {
                             return <tr key = {i}>
                                 {row.map((node,j) => {
-                                    const {row,col,isStart,isEnd,isVisited,isWall,isShortestPathNode,weight,isWeighted,imgSrcLowWeight} = node;
+                                    const {row,col,isStart,isEnd,isVisited,isWall,isShortestPathNode,weight,isWeighted} = node;
                                     return <Node 
                                         key = {`${i} + ${j}`}
                                         row = {row}
@@ -290,7 +287,6 @@ class Board extends React.Component {
                                         onMouseEnter = {this.onMouseEnter}
                                         onMouseLeave = {this.onMouseLeave}
                                         onMouseUp = {this.onMouseUp}
-                                        // imgSrcLowWeight = {imgSrcLowWeight }
                                     />
                                     })
                                 }
