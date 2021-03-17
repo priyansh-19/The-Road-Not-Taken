@@ -33,9 +33,10 @@ class Board extends React.Component {
             isMouseClickedFor:'',
             moveStart:false,
             moveEnd:false,
-            isSelectedAlgorithm:'BFS',
+            isSelectedAlgorithm:'Astar',
             viewPortWidth:window.innerWidth,
             viewPortHeight:window.innerHeight,
+            pathFoundState : -1,
             nodes:[]
         });
     }
@@ -73,7 +74,7 @@ class Board extends React.Component {
         const endY = parseInt(yNodes*(0.5));
         return {startX,startY,endX,endY,xNodes,yNodes,sideLength};
     }
-    
+
     recomputation(){
         let {viewPortHeight,viewPortWidth} = this.state;
         viewPortHeight *= (0.6);
@@ -216,11 +217,14 @@ class Board extends React.Component {
 
     visualizeAlgorithm = () =>{
         this.clearPath('path');
+        this.setState({pathFoundState:-1});
         const {isSelectedAlgorithm} = this.state;
         const paths = algorithmList[isSelectedAlgorithm](this.state);
         const path = paths[0];
         const shortestPath = paths[1];
+        const pathFoundState = paths[2] ? 1 : 0;
         const ms = 40;
+        const ms2 = 20;
         for(let i = 0;i<path.length;i++){
             setTimeout( () =>{
                 this.createNewGrid(path[i],0);
@@ -230,8 +234,11 @@ class Board extends React.Component {
         for(let i = 0;i<shortestPath.length;i++){
             setTimeout( () =>{
                 this.createNewGrid(shortestPath[i],1);
-            }, timeElaspsed + i*(ms/2));
+            }, timeElaspsed + i*(ms2));
         }
+        setTimeout( ()=>{
+            this.setState({pathFoundState});
+        },timeElaspsed + (ms2*shortestPath.length))
     }
 
     selectThisAlgorithm = (algorithm) =>{
@@ -245,13 +252,14 @@ class Board extends React.Component {
             row.forEach((node)=>{
                 if(value === 'path') { node.isVisited = false; node.isShortestPathNode = false; }
                 if(value === 'walls') node.isWall = false;
+                if(value === 'weights') node.isWeighted = false;
             })
         })
         this.setState({nodes});
     }
 
     render(){
-        console.log('full Render')
+        console.log(this.state.pathFoundState);
         const {nodes} = this.state;
         return (
             <div className="screen">
@@ -265,7 +273,7 @@ class Board extends React.Component {
                     isSelectedAlgorithm = {this.state.isSelectedAlgorithm}
                     selectThisAlgorithm = {this.selectThisAlgorithm}
                 />
-                <table className = 'mainGrid'>
+                <table className = {`mainGrid ${this.state.pathFoundState === 1 ? 'onPathFound' : this.state.pathFoundState === 0 ? 'onPathNotFound' : '' }`}>
                     <tbody>
                         {nodes.map( (row,i) => {
                             return <tr key = {i}>

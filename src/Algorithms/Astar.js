@@ -60,7 +60,7 @@ export const algorithmAstar = (values) =>{
         }
         vis[i][j] = true;
     }
-    if(!found){return [path,[]];}
+    if(!found){return [path,[],found];}
     let currentY = endY;
     let currentX = endX;
     while(parent[currentY][currentX][0] !== currentY ||  parent[currentY][currentX][1] !== currentX){
@@ -68,5 +68,5 @@ export const algorithmAstar = (values) =>{
         shortestPath.push([currentY,currentX]);
     }
     shortestPath.reverse();
-    return [path,shortestPath]
+    return [path,shortestPath,found]
 }

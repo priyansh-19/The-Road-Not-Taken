@@ -9,18 +9,33 @@ class Header extends React.Component {
                 <div className = 'headerTitle'>  VISUALIZER</div>
             </div>
             <ul className = 'headerOptions2'>
-                <li
+
+               <div className = 'leftHeader2'>
+               <li
                 onClick = { () => {this.props.clear('path')}}
                 className = 'clearButton'
-                >Clear Path</li>
+                > Clear Path </li>
+
                <li
                 onClick = {() =>{this.props.clear('walls')}}
                 className = 'clearButton'
-                >Clear Walls</li>
+                > Clear Walls </li>
+
+                <li
+                onClick = {() =>{this.props.clear('weights')}}
+                className = 'clearButton'
+                > Clear Weights </li>
+               </div>
+                
                 <li 
-                    onClick = {this.props.onClickVisualize}
-                    className = 'goButton'
-                >GO</li>
+                onClick = {this.props.onClickVisualize}
+                className = 'goButton'
+                > GO </li>
+
+                <div className = 'rightHeader2'>
+                    
+                </div>
+
             </ul>
         </div>
     }
