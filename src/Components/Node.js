@@ -1,10 +1,7 @@
 import React from 'react';
 import '../Styles/Node.css';
 import tree1 from '../images/tree4.png';
-import tree2 from '../images/tree4.png';
-import tree3 from '../images/tree4.png';
-import tree4 from '../images/tree4.png'
-import tree5 from '../images/tree4.png';
+
 
 class Node extends React.Component {
  
@@ -54,9 +51,9 @@ class Node extends React.Component {
             {
                 <div className = 'imageContainer'>
                 {(isWeighted && !isWall && !isStart && !isEnd) ? 
-                        <img className = 'weightImage' src = {isWeighted ? 
-                            treeNumber === 1 ? tree1 : treeNumber == 2 ? tree2 : treeNumber == 3 ? tree3 : treeNumber == 4 ? tree4 : tree5
-                        : ''} onError = {(e) => {e.target.style.display='none'}}/>
+                        <img className = 'weightImage' src = {
+                            isWeighted ? tree1 : ''
+                        } onError = {(e) => {e.target.style.display='none'}}/>
                 : null}
                 </div>
             }    

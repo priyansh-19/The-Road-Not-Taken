@@ -3,10 +3,12 @@ import Node from './Node';
 import '../Styles/Board.css'
 import Header from './Header'
 import AlgorithmList from './AlgorithmList';
+import Stats from './Stats'
 import {algorithmBFS} from '../Algorithms/BFS';
 import {algorithmDFS} from '../Algorithms/DFS';
 import { algorithmDijkstras } from '../Algorithms/Dijkstras';
 import {algorithmAstar} from '../Algorithms/Astar';
+import { getByDisplayValue } from '@testing-library/dom';
 
 const algorithmList = {
 Dijkstras:algorithmDijkstras,
@@ -14,7 +16,11 @@ BFS:algorithmBFS,
 DFS:algorithmDFS,
 Astar:algorithmAstar,
 };
-
+const cellSizeMap = {
+    Small: 0.9,
+    Medium : 1.2,
+    Large : 1.5
+}
 class Board extends React.Component {
 
     constructor(){
@@ -37,6 +43,17 @@ class Board extends React.Component {
             viewPortWidth:window.innerWidth,
             viewPortHeight:window.innerHeight,
             pathFoundState : -1,
+            message:'',
+
+            nodesVisited : 0,
+            pathNodes : 0,
+            numberOfCells : xNodes*yNodes,
+            pathWeight:0,
+
+            cellSize : 'Medium',
+
+
+
             nodes:[]
         });
     }
@@ -62,34 +79,38 @@ class Board extends React.Component {
     precomputation(){
         let [viewPortHeight,viewPortWidth] = this.getViewport();
         viewPortHeight *= (0.6);
-        viewPortWidth *= (0.7);
-
-        const sideLength = ((viewPortHeight*(6.5))/100)  ;
+        viewPortWidth *= (0.6);
+        const Multiplier = cellSizeMap['Medium'];
+        const maxValue = Math.max(viewPortHeight,viewPortWidth);
+        const sideLength = ((maxValue*(3.2))/100)*Multiplier  ;
         const xNodes = parseInt(viewPortWidth/sideLength);
         const yNodes = parseInt(viewPortHeight/sideLength);
 
-        const startX = parseInt(xNodes*(0.3));
-        const startY = parseInt(yNodes*(0.5)); 
-        const endX = parseInt(xNodes*(0.7));
-        const endY = parseInt(yNodes*(0.5));
+        const startX = parseInt(xNodes*(0.3)) ;
+        const startY = parseInt(yNodes*(0.5)) -1; 
+        const endX = parseInt(xNodes*(0.7)) ;
+        const endY = parseInt(yNodes*(0.5)) -1;
         return {startX,startY,endX,endY,xNodes,yNodes,sideLength};
     }
 
     recomputation(){
-        let {viewPortHeight,viewPortWidth} = this.state;
+        let {viewPortHeight,viewPortWidth,cellSize,numberOfCells} = this.state;
+        const Multiplier = cellSizeMap[cellSize];
         viewPortHeight *= (0.6);
-        viewPortWidth *= (0.7);
-
-        const sideLength = ((viewPortHeight*(6.5))/100)  ;
+        viewPortWidth *= (0.6);
+        const maxValue = Math.max(viewPortHeight,viewPortWidth);
+        const sideLength = ((maxValue*(3.2))/100)*Multiplier  ;
         const xNodes = parseInt(viewPortWidth/sideLength);
         const yNodes = parseInt(viewPortHeight/sideLength);
 
         const startX = parseInt(xNodes*(0.3));
-        const startY = parseInt(yNodes*(0.5)); 
+        const startY = parseInt(yNodes*(0.5)) -1; 
         const endX = parseInt(xNodes*(0.7));
-        const endY = parseInt(yNodes*(0.5));
+        const endY = parseInt(yNodes*(0.5)) -1;
         const nodes = this.getInitialGrid(xNodes,yNodes,startX,startY,endX,endY);
-        this.setState({startX,startY,endX,endY,xNodes,yNodes,sideLength,nodes});
+        numberOfCells = xNodes*yNodes;
+
+        this.setState({startX,startY,endX,endY,xNodes,yNodes,sideLength,nodes,cellSize,numberOfCells});
     }
     
     onMouseDown = (row,col,e) =>{
@@ -127,7 +148,7 @@ class Board extends React.Component {
         else if(this.state.moveEnd){
             nodes[row][col].isEnd = true;
         }
-        else if(row == startY && col == startX || row == endY && col == endX){
+        else if( (row === startY && col === startX) || (row === endY && col === endX) ){
             // do nothing
         }
         else if(e.ctrlKey && this.state.isMouseClickedFor === 'weight'){
@@ -205,14 +226,14 @@ class Board extends React.Component {
     createNewGrid = (node,renderState) =>{
         const i = node[0];
         const j = node[1];
-        const {nodes,yNodes,xNodes} = this.state;
+        let {nodes,yNodes,xNodes,nodesVisited,pathNodes,pathWeight} = this.state;
         
-        if(i < yNodes && j< xNodes && i>=0 && j>=0 && !nodes[i][j].isStart){
+        if(i < yNodes && j< xNodes && i>= 0 && j>=0 && !nodes[i][j].isStart){
             
-            if(renderState == 0 ) { nodes[i][j].isVisited = true; nodes[i][j].isShortestPathNode = false; }
-            else if(renderState == 1) {nodes[i][j].isShortestPathNode = true; nodes[i][j].isVisited = false; }
+            if(renderState === 0 ) { nodes[i][j].isVisited = true; nodes[i][j].isShortestPathNode = false; nodesVisited++; }
+            else if(renderState === 1) {nodes[i][j].isShortestPathNode = true; nodes[i][j].isVisited = false; pathNodes++; pathWeight += nodes[i][j].weight }
         }
-        this.setState({nodes});
+        this.setState({nodes,nodesVisited,pathNodes,pathWeight});
     }
 
     visualizeAlgorithm = () =>{
@@ -237,13 +258,22 @@ class Board extends React.Component {
             }, timeElaspsed + i*(ms2));
         }
         setTimeout( ()=>{
-            this.setState({pathFoundState});
+            const message = pathFoundState ? 'Target is Reachable' : 'Target is Unreachable';
+            this.setState({pathFoundState,message});
         },timeElaspsed + (ms2*shortestPath.length))
     }
 
     selectThisAlgorithm = (algorithm) =>{
 
         this.setState({isSelectedAlgorithm:algorithm});
+    }
+
+    setMessage = (message) =>{
+        this.setState({message});
+    }
+    setCellSize = (cellSize) =>{
+    //    this.recomputation(cellSize);
+    this.setState({cellSize},()=>{this.recomputation()})
     }
 
     clearPath = (value) =>{
@@ -255,17 +285,19 @@ class Board extends React.Component {
                 if(value === 'weights') node.isWeighted = false;
             })
         })
-        this.setState({nodes});
+        
+        this.setState({nodes,nodesVisited:0,pathNodes:0,pathWeight:0,message:''});
     }
 
     render(){
-        console.log(this.state.pathFoundState);
+        // console.log('full rerender');
         const {nodes} = this.state;
         return (
             <div className="screen">
             <Header 
             onClickVisualize = {this.visualizeAlgorithm}
             clear = {this.clearPath}
+            setCellSize = {this.setCellSize}
             >Visualize</Header>
             <div className="mainArea">
                 <AlgorithmList
@@ -273,7 +305,8 @@ class Board extends React.Component {
                     isSelectedAlgorithm = {this.state.isSelectedAlgorithm}
                     selectThisAlgorithm = {this.selectThisAlgorithm}
                 />
-                <table className = {`mainGrid ${this.state.pathFoundState === 1 ? 'onPathFound' : this.state.pathFoundState === 0 ? 'onPathNotFound' : '' }`}>
+                <table className = {`mainGrid onChangeMainGrid ${this.state.pathFoundState === 1 ? 'onPathFound' : this.state.pathFoundState === 0 ? 'onPathNotFound' : ''}`}>
+                    {/* <div class = 'messageToUser' >{this.state.message}</div> */}
                     <tbody>
                         {nodes.map( (row,i) => {
                             return <tr key = {i}>
@@ -302,6 +335,7 @@ class Board extends React.Component {
                         })}
                     </tbody>
                 </table>
+                <Stats state1 = {this.state} />
             </div>
             </div>
         )

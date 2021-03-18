@@ -5,6 +5,7 @@
     height: 100vh;;
 }
 .mainArea{
+    /* transition: all 4s ease-in; */
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -12,11 +13,26 @@
     height: 100%;
 }
 .mainGrid{
+    /* opacity: 0; */
     border-collapse: collapse;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    /* margin-bottom: 25px; */
 }
+.onChangeMainGrid{
+    animation: onChangeMainGrid 2s ease;
+    animation-fill-mode: forwards;
+    /* opacity: 0; */
+}
+@keyframes onChangeMainGrid{
+    /* from{opacity: 0;background-color: teal;}
+    top{opacity: 1;background-color:turquoise;} */
+}
+.afterChangeMainGrid{
+}
+
 .onPathFound{
     animation: pathFound 3s ease;
     animation-delay: 1s;
@@ -25,13 +41,34 @@
     animation: pathNotFound 3s ease;
     animation-delay: 1s;
 }
+.messageToUser{
+    position: absolute;
+    font-family: oxygen;
+    font-size: 1.5em;
+    margin-bottom: 5px;
+    animation: messageToUserFade 4s ease-in-out;
+    margin-bottom: 32%;
+    opacity: 0;
+    animation-fill-mode: forwards;
+    animation-delay: 2s;
+}
+@keyframes messageToUserFade{
+    0%{
+        opacity: 0;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+}
 @keyframes pathFound{
    
     25%{
         box-shadow: 10px 10px 50px rgb(50, 200, 255),-10px -10px 50px rgb(249, 63, 255);
     }
     100%{
-        box-shadow: none;
     }
 }
 @keyframes pathNotFound{

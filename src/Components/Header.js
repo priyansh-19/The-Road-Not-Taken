@@ -1,8 +1,10 @@
 import React from 'react';
 import '../Styles/Header.css';
+import Dropdown from './Dropdown'
 
 class Header extends React.Component {
     render(){
+        // console.log(this.props)
 
         return <div className = 'header'>
             <div className = 'headerOptions'>
@@ -11,20 +13,20 @@ class Header extends React.Component {
             <ul className = 'headerOptions2'>
 
                <div className = 'leftHeader2'>
-               <li
-                onClick = { () => {this.props.clear('path')}}
-                className = 'clearButton'
-                > Clear Path </li>
+                    <li
+                        onClick = { () => {this.props.clear('path')}}
+                        className = 'clearButton'
+                        > Clear Path </li>
 
-               <li
-                onClick = {() =>{this.props.clear('walls')}}
-                className = 'clearButton'
-                > Clear Walls </li>
+                    <li
+                        onClick = {() =>{this.props.clear('walls')}}
+                        className = 'clearButton'
+                        > Clear Walls </li>
 
-                <li
-                onClick = {() =>{this.props.clear('weights')}}
-                className = 'clearButton'
-                > Clear Weights </li>
+                        <li
+                        onClick = {() =>{this.props.clear('weights')}}
+                        className = 'clearButton'
+                        > Clear Weights </li>
                </div>
                 
                 <li 
@@ -33,8 +35,21 @@ class Header extends React.Component {
                 > GO </li>
 
                 <div className = 'rightHeader2'>
-                    
-                </div>
+                        <li
+                        onClick = { () => {this.props.clear('path')}}
+                        className = 'clearButton'
+                        > Cell Size </li>
+
+                        <li
+                        onClick = {() =>{this.props.clear('walls')}}
+                        className = 'clearButton'
+                        > Weight </li>
+
+                       <Dropdown
+                       functions = {{setCellSize : this.props.setCellSize,}} 
+                       values = {{header:'Cell Size', list:['Small','Medium','Large'] } }
+                       class = 'clearButton'/>
+                 </div>
 
             </ul>
         </div>
