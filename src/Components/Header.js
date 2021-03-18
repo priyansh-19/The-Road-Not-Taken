@@ -35,20 +35,24 @@ class Header extends React.Component {
                 > GO </li>
 
                 <div className = 'rightHeader2'>
-                        <li
-                        onClick = { () => {this.props.clear('path')}}
-                        className = 'clearButton'
-                        > Cell Size </li>
 
-                        <li
-                        onClick = {() =>{this.props.clear('walls')}}
-                        className = 'clearButton'
-                        > Weight </li>
+                        <Dropdown
+                            functions = {{setCellSize : this.props.setCellSize,}} 
+                            values = {{header:'Cell Size', list:['Small','Medium','Large'] } }
+                            class = 'clearButton'
+                        />
+                        <Dropdown
+                            functions = {{setCellSize : this.props.setCellSize,}} 
+                            values = {{header:'Weight', list:['Small','Medium','Large'] } }
+                            class = 'clearButton'
+                        />
+                        <Dropdown
+                            functions = {{setCellSize : this.props.setCellSize,}} 
+                            values = {{header:'Animation', list:['Small','Medium','Large'] } }
+                            class = 'clearButton'
+                        />
 
-                       <Dropdown
-                       functions = {{setCellSize : this.props.setCellSize,}} 
-                       values = {{header:'Cell Size', list:['Small','Medium','Large'] } }
-                       class = 'clearButton'/>
+                       
                  </div>
 
             </ul>

@@ -47,8 +47,9 @@
 .item-value{
     /* font-family: 'PT Sans', sans-serif; */
     font-family: 'Open Sans', sans-serif;
-    font-weight:  300;
+    font-weight:  500;
     font-size: 1.1em;
     margin-top: 22px;
+    color: rgb(39, 206, 231);
     /* border : 1px solid black; */
 }
