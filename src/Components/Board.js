@@ -274,9 +274,9 @@ class Board extends React.Component {
     }
     setCellSize = (cellSize) =>{
        this.recomputation(cellSize);
-    if(cellSize == 'Small')
-        this.setState({cellSize,animation:'Low'},()=>{this.recomputation()})
-    else
+    // if(cellSize == 'Small')
+    //     this.setState({cellSize,animation:'Low'},()=>{this.recomputation()})
+    // else
     this.setState({cellSize},()=>{this.recomputation()})
     }
     setAnimation = (animation) => {
