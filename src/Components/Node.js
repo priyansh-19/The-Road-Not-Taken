@@ -1,14 +1,15 @@
 import React from 'react';
 import '../Styles/Node.css';
 import tree1 from '../images/tree4.png';
-import tree3 from '../images/tree4.png'
+import tree3 from '../images/tree4.png';
+import flag from '../images/red-flag.png';
+import levi from '../images/levi.png'
 
 
 class Node extends React.Component {
  
 
     render(){
-      
         const {sideLength,
             isStart,
             isEnd,
@@ -33,13 +34,17 @@ class Node extends React.Component {
             isWeighted : `isWeighted${weight}x`
         }
         // const imgSource = weight == 2 ? tree1 : tree3 ;
+        // isEnd && isShortestPathNode? `isEnd ${classOf['isShortestPathNode']}` :
+
         const addClass = 
+        isStart && isShortestPathNode? `isStart ${classOf['isShortestPathNode']}` :
             isStart ? 'isStart' :
-                isEnd ? 'isEnd' :
-                    isWall ? classOf['isWall'] :
-                        isWeighted && isVisited? `${classOf['isWeighted']} ${classOf['isVisited']}` :
-                            isWeighted && isShortestPathNode ? `${classOf['isWeighted']} ${classOf['isShortestPathNode']}`:
-                                isWeighted ? classOf['isWeighted'] :
+                isEnd && isShortestPathNode? `isEnd ${classOf['isShortestPathNode']}` :
+                    isEnd ? 'isEnd' :
+                        isWall ? classOf['isWall'] :
+                        // isWeighted && isVisited? `${classOf['isWeighted']} ${classOf['isVisited']}` :
+                            isWeighted && isShortestPathNode ? `${classOf['isShortestPathNode']}`:
+                                // isWeighted ? classOf['isWeighted'] :
                                     isVisited ?  classOf['isVisited'] :
                                         isShortestPathNode ? classOf['isShortestPathNode']: ''
         const divStyle = {
@@ -57,17 +62,20 @@ class Node extends React.Component {
             onMouseLeave = {(e) => onMouseLeave(row,col,e)}
             onMouseUp = {() => onMouseUp(row,col)}
             >
-            {
-                <div className = {`imageContainer`}>
-                {(isWeighted && !isWall && !isStart && !isEnd && animation!='Low') ? 
+           
+            {   
+                <div className = { (isEnd  || isStart) ? `imageContainerSE` : `imageContainer ${isWeighted ? classOf['isWeighted'] : ''}`}>
+                {(isWeighted && !isWall && !isStart && !isEnd && animation!='Low' && !isShortestPathNode) ? 
                         <img 
                         className = {`weightImage${animation}`} 
                         src = {
-                            isWeighted ? weight === 2 ? tree1 : tree3 : ''
+                            isWeighted  ? weight === 2 ? tree1 : tree3 : ''
                         } 
-                        // style ={ isWeighted ? weight === 4 ? {transform:scale(1.2)} :{}: {}}
-                        onError = {(e) => {e.target.style.display='none'}}/>
+                        />
                 : null}
+                 { isEnd ? <img src = {flag} className = 'isEndImage'/> : ''}
+                 { isStart ? <img src = {levi} className = 'isStartImage'/> : ''}
+                    
                 </div>
             }    
         </td>

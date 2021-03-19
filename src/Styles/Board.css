@@ -60,7 +60,8 @@
 }
 @keyframes pathNotFound{
     25%{
-        box-shadow: 10px 10px 30px rgb(255, 60, 76),-10px -10px 30px rgb(255, 49, 66);
+        /* box-shadow: 10px 10px 30px rgb(255, 60, 76),-10px -10px 30px rgb(255, 49, 66); */
+        box-shadow: 10px 10px 50px rgb(50, 200, 255),-10px -10px 50px rgb(249, 63, 255);
     }
     100%{
         box-shadow: none;

@@ -5,6 +5,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 15%;
+    padding: 0px;
 }
 .isStart{
   background-color: rgb(122, 222, 233);
@@ -13,14 +14,72 @@
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
   box-shadow: 1px 1px 2px  rgb(59, 59, 59);
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+
+}
+.isStartImage{
+  position: absolute;
+  width: 100%;
+  /* height: 180%; */
+  bottom: 35%;
+  left:-20%;
+
+  /* transform:scale(0.9); */
+  /* transform: scale(1.4); */
+  pointer-events: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .isEnd{
-  background-color: rgb(243, 116, 194);
+  background-color: rgb(255, 146, 250);
   animation-name: endAnimation;
+  border:none;
   animation-duration: 0.8s; 
   animation-timing-function: ease-out;
-  animation-fill-mode: forwards;
-  box-shadow: 1px 1px 2px  rgb(59, 59, 59);
+  /* animation-fill-mode: forwards; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  box-shadow: 1px 1px 2px rgb(88, 88, 88);
+
+}
+.imageContainerSE{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: rgb(255, 255, 255);
+  border-radius: 100%;
+  transform: scale(0.65);
+  box-shadow: 1.5px 1.5px 2px rgb(52, 52, 52);
+  pointer-events: none;
+}
+.isEndImage{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  bottom: 64%;
+  left:44%;
+  transform: scale(1.4);
+  pointer-events: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  
+  /* transform: scale(1.2); */
+  /* animation: addTree 1s ease-in-out; */
 }
 .visitedMax{
     animation-name: visitedAnimationMax;
@@ -86,11 +145,7 @@
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
 }
-/* .isWeighted1x{
-  background-color: rgba(178, 247, 164, 0.646);
-  box-shadow: 3px 3px 2px  rgb(138, 137, 137), 3px 3px 6px  rgb(103, 103, 103);
-  border-radius: 200%;
-} */
+
 .isWeighted2x{
   background-color: rgba(178, 247, 164, 0.646);
   box-shadow: 3px 3px 2px  rgb(138, 137, 137), 3px 3px 6px  rgb(103, 103, 103);
@@ -107,7 +162,7 @@
   border-radius: 200%;
 }
 .isWeighted10x{
-  background-color: rgba(138, 236, 238, 0.952);
+  background-color: rgba(241, 239, 239, 0.952);
   box-shadow: 3px 3px 2px  rgb(138, 137, 137), 3px 3px 6px  rgb(103, 103, 103);
   border-radius: 200%;
 }
@@ -120,6 +175,7 @@
   width: inherit;
   align-items: center;
   justify-content: center;
+  border-radius: 100%;
 }
 
 .weightImageMax{
@@ -277,7 +333,6 @@
   }
   @keyframes startAnimation{
     0%{
-      transform: scale(0.2);
       background-color: rgb(38, 91, 198) ;
       border-radius:100%;
     }
@@ -292,8 +347,8 @@
   }
   @keyframes endAnimation{
     0%{
-      transform: scale(0.2);
-      background-color: rgb(206, 21, 89) ;
+      /* transform: scale(0.2); */
+      background-color: rgb(210, 73, 214) ;
       border-radius:100%;
     }
    
@@ -302,7 +357,9 @@
     }
     100% {
       transform: scale(1);
-      background-color: rgb(243, 116, 194);
+      background-color: rgb(255, 146, 250);
+      /* border-radius: 50%; */
+
 
     }
   }
@@ -397,6 +454,6 @@
       /* transform: rotateX(40deg); */
     }
   }
- 
+
 
   

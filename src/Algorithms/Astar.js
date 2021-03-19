@@ -42,7 +42,6 @@ export const algorithmAstar = (values) =>{
         }
         path.push([i,j]);
         for(let k=0;k<4 ;k++){
-            console.log(distance[i][j]);
             const newY = adj[k][0] + i;
             const newX = adj[k][1] + j;
           

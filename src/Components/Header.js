@@ -8,7 +8,7 @@ class Header extends React.Component {
 
         return <div className = 'header'>
             <div className = 'headerOptions'>
-                <div className = 'headerTitle'>  VISUALIZER</div>
+                <div className = 'headerTitle'>  The Road Not Taken</div>
             </div>
             <ul className = 'headerOptions2'>
 
@@ -51,7 +51,8 @@ class Header extends React.Component {
                         <Dropdown
                             functions = {{setAnimation : this.props.setAnimation,}} 
                             values = {{header:'Animation', list:['Low','Medium','Max'] } }
-                            selectedItem = 'Max'
+                            selectedItem = {this.props.animation}
+                           
                         />
 
                        

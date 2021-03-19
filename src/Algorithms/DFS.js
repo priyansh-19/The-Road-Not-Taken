@@ -23,8 +23,9 @@ export const algorithmDFS = (values) =>{
     const path = [];
     // const shortestPath =  [];
     dfs(startY,startX,yNodes,xNodes,endY,endX,path,vis,nodes);
+    const isFound = found;
     found = false;
-  
-    return [path,[]];
+    const shortestPath = (isFound) ? path : [] ;
+    return [path,shortestPath,isFound];
 
 }

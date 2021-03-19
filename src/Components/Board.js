@@ -17,9 +17,9 @@ DFS:algorithmDFS,
 Astar:algorithmAstar,
 };
 const cellSizeMap = {
-    Small: 0.9,
-    Medium : 1.2,
-    Large : 1.5
+    Small: 1,
+    Medium : 1.25,
+    Large : 1.7
 }
 class Board extends React.Component {
 
@@ -92,6 +92,7 @@ class Board extends React.Component {
     }
 
     recomputation(){
+        console.log(this.state.animation)
         let {viewPortHeight,viewPortWidth,cellSize,numberOfCells} = this.state;
         const Multiplier = cellSizeMap[cellSize];
         viewPortHeight *= (0.6);
@@ -204,7 +205,6 @@ class Board extends React.Component {
         return nodes;
     }
     
-   
     createNode = (i,j,startX,startY,endX,endY) =>{
         
         const isStart = (j === startX && i === startY ? true : false);
@@ -228,7 +228,7 @@ class Board extends React.Component {
         const j = node[1];
         let {nodes,yNodes,xNodes,nodesVisited,pathNodes,pathWeight} = this.state;
         
-        if(i < yNodes && j< xNodes && i>= 0 && j>=0 && !nodes[i][j].isStart){
+        if(i < yNodes && j< xNodes && i>= 0 && j>=0 ){
             
             if(renderState === 0 ) { nodes[i][j].isVisited = true; nodes[i][j].isShortestPathNode = false; nodesVisited++; }
             else if(renderState === 1) {nodes[i][j].isShortestPathNode = true; nodes[i][j].isVisited = false; pathNodes++; pathWeight += nodes[i][j].weight;}
@@ -242,10 +242,11 @@ class Board extends React.Component {
         const {isSelectedAlgorithm} = this.state;
         const paths = algorithmList[isSelectedAlgorithm](this.state);
         const path = paths[0];
-        const shortestPath = paths[1];
+        const shortestPath = paths[1]; 
         const pathFoundState = paths[2] ? 1 : 0;
+        if(pathFoundState){shortestPath.push([this.state.endY,this.state.endX]); shortestPath.unshift([this.state.startY,this.state.startX]);}
         const ms = 40;
-        const ms2 = 20;
+        const ms2 = 30;
         for(let i = 0;i<path.length;i++){
             setTimeout( () =>{
                 this.createNewGrid(path[i],0);
@@ -272,7 +273,10 @@ class Board extends React.Component {
         this.setState({message});
     }
     setCellSize = (cellSize) =>{
-    //    this.recomputation(cellSize);
+       this.recomputation(cellSize);
+    if(cellSize == 'Small')
+        this.setState({cellSize,animation:'Low'},()=>{this.recomputation()})
+    else
     this.setState({cellSize},()=>{this.recomputation()})
     }
     setAnimation = (animation) => {
@@ -303,6 +307,7 @@ class Board extends React.Component {
             <Header 
             onClickVisualize = {this.visualizeAlgorithm}
             clear = {this.clearPath}
+            animation = {this.state.animation}
             setCellSize = {this.setCellSize}
             setAnimation = {this.setAnimation}
             setWeight = {this.setWeight}

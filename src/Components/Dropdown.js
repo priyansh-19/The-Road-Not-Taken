@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,useRef} from 'react';
 import '../Styles/Dropdown.css';
 import dropDownArrow from '../images/drop-down-arrow.svg'
 
@@ -9,10 +9,21 @@ const Dropdown = (props) =>{
     const {setCellSize} = props.functions;
     const {setAnimation} = props.functions;
     const {setWeight} = props.functions;
+    const ref = useRef();
+   
+    //event bubbling has been used here
+    // console.log(selectedItem,props.selectedItem,'final check');
+    useEffect( ()=>{
+        document.body.addEventListener('click',(event)=>{
+            if(ref.current.contains(event.target)){return;}
+            setFlag(false);
+        })
+    },[flag]);
 
     const activeFunction = header === 'Cell Size' ? setCellSize : header === 'Animation' ? setAnimation : header === 'Weight' ? setWeight : '';
     return(
         <li 
+        ref = {ref}
         onClick = {()=>{setFlag(!flag)}}
         className = 'clearButton dd-wrapper'>
                {header}
@@ -21,11 +32,13 @@ const Dropdown = (props) =>{
             className = {`dd-list-wrapper ${flag ? 'openList' : 'closeList'}`}>
                { 
                list.map((item)=>{
+                  
                    return(
                     <div
-                    onClick ={()=>{setSelectedItem(item);setFlag(!flag);activeFunction(item)}}
+                    //set selection takes time, hence used props.selectedItem == item 
+                    onClick ={()=>{setSelectedItem(item);;activeFunction(item)}}
                     className = 'dd-list-item-wrapper'>
-                        <li className = {`dd-list-item ${selectedItem === item ? 'isSelectedItem' : ''}`}>{item}</li>
+                        <li className = {`dd-list-item ${props.selectedItem === item ? 'isSelectedItem' : ''}`}>{item}</li>
                     </div>
                    )
                })
