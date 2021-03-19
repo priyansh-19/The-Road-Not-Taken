@@ -8,7 +8,7 @@ import {algorithmBFS} from '../Algorithms/BFS';
 import {algorithmDFS} from '../Algorithms/DFS';
 import { algorithmDijkstras } from '../Algorithms/Dijkstras';
 import {algorithmAstar} from '../Algorithms/Astar';
-import { getByDisplayValue } from '@testing-library/dom';
+
 
 const algorithmList = {
 Dijkstras:algorithmDijkstras,
@@ -34,7 +34,6 @@ class Board extends React.Component {
             sideLength,
             xNodes,
             yNodes,
-            selectedWeight:4,
             isMouseClicked:false,
             isMouseClickedFor:'',
             moveStart:false,
@@ -51,9 +50,8 @@ class Board extends React.Component {
             pathWeight:0,
 
             cellSize : 'Medium',
-
-
-
+            animation : 'Max',
+            weight : '2x',
             nodes:[]
         });
     }
@@ -124,9 +122,10 @@ class Board extends React.Component {
         else if(e.ctrlKey){
             nodes[row][col].isWall = false;
             nodes[row][col].isVisited = false;
-            nodes[row][col].weight = this.state.selectedWeight;
+            nodes[row][col].weight = parseInt(this.state.weight.slice(0,-1));
             nodes[row][col].isWeighted ^= 1;
             this.setState({nodes,isMouseClicked:true,isMouseClickedFor:'weight'});
+            // console.log(nodes[row][col].weight);
 
         }
         else{
@@ -155,7 +154,7 @@ class Board extends React.Component {
 
             nodes[row][col].isWall = false;
             nodes[row][col].isVisited = false;
-            nodes[row][col].weight = this.state.selectedWeight;
+            nodes[row][col].weight = parseInt(this.state.weight.slice(0,-1));
             nodes[row][col].isWeighted = true;
         }
         else{
@@ -204,6 +203,7 @@ class Board extends React.Component {
         }
         return nodes;
     }
+    
    
     createNode = (i,j,startX,startY,endX,endY) =>{
         
@@ -218,7 +218,7 @@ class Board extends React.Component {
             isWall:false,
             isShortestPathNode:false,
             isWeighted:false,
-            weight:1,
+            weight: 1,
         }
         return node;
     }
@@ -231,7 +231,7 @@ class Board extends React.Component {
         if(i < yNodes && j< xNodes && i>= 0 && j>=0 && !nodes[i][j].isStart){
             
             if(renderState === 0 ) { nodes[i][j].isVisited = true; nodes[i][j].isShortestPathNode = false; nodesVisited++; }
-            else if(renderState === 1) {nodes[i][j].isShortestPathNode = true; nodes[i][j].isVisited = false; pathNodes++; pathWeight += nodes[i][j].weight }
+            else if(renderState === 1) {nodes[i][j].isShortestPathNode = true; nodes[i][j].isVisited = false; pathNodes++; pathWeight += nodes[i][j].weight;}
         }
         this.setState({nodes,nodesVisited,pathNodes,pathWeight});
     }
@@ -275,6 +275,12 @@ class Board extends React.Component {
     //    this.recomputation(cellSize);
     this.setState({cellSize},()=>{this.recomputation()})
     }
+    setAnimation = (animation) => {
+        this.setState({animation});
+    }
+    setWeight = (weight) =>{
+        this.setState({weight});
+    }
 
     clearPath = (value) =>{
         const {nodes} = this.state;
@@ -282,7 +288,7 @@ class Board extends React.Component {
             row.forEach((node)=>{
                 if(value === 'path') { node.isVisited = false; node.isShortestPathNode = false; }
                 if(value === 'walls') node.isWall = false;
-                if(value === 'weights') node.isWeighted = false;
+                if(value === 'weights') {node.isWeighted = false; node.weight = 1;}
             })
         })
         
@@ -298,6 +304,8 @@ class Board extends React.Component {
             onClickVisualize = {this.visualizeAlgorithm}
             clear = {this.clearPath}
             setCellSize = {this.setCellSize}
+            setAnimation = {this.setAnimation}
+            setWeight = {this.setWeight}
             >Visualize</Header>
             <div className="mainArea">
                 <AlgorithmList
@@ -328,6 +336,7 @@ class Board extends React.Component {
                                         onMouseEnter = {this.onMouseEnter}
                                         onMouseLeave = {this.onMouseLeave}
                                         onMouseUp = {this.onMouseUp}
+                                        animation = {this.state.animation}
                                     />
                                     })
                                 }

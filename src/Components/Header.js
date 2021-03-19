@@ -39,17 +39,19 @@ class Header extends React.Component {
                         <Dropdown
                             functions = {{setCellSize : this.props.setCellSize,}} 
                             values = {{header:'Cell Size', list:['Small','Medium','Large'] } }
+                            selectedItem = 'Medium'
                             class = 'clearButton'
                         />
                         <Dropdown
-                            functions = {{setCellSize : this.props.setCellSize,}} 
-                            values = {{header:'Weight', list:['Small','Medium','Large'] } }
+                            functions = {{setWeight : this.props.setWeight,}} 
+                            values = {{header:'Weight', list:['2x','4x','6x','10x'] } }
+                            selectedItem = '2x'
                             class = 'clearButton'
                         />
                         <Dropdown
-                            functions = {{setCellSize : this.props.setCellSize,}} 
-                            values = {{header:'Animation', list:['Small','Medium','Large'] } }
-                            class = 'clearButton'
+                            functions = {{setAnimation : this.props.setAnimation,}} 
+                            values = {{header:'Animation', list:['Low','Medium','Max'] } }
+                            selectedItem = 'Max'
                         />
 
                        

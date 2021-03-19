@@ -1,6 +1,7 @@
 import React from 'react';
 import '../Styles/Node.css';
 import tree1 from '../images/tree4.png';
+import tree3 from '../images/tree4.png'
 
 
 class Node extends React.Component {
@@ -20,23 +21,31 @@ class Node extends React.Component {
             onMouseUp,
             isWall,
             isShortestPathNode,
-            isWeighted 
+            isWeighted,
+            animation,
+            weight
             } = this.props;
 
+        const classOf = {
+            isWall : `isWall${animation}`,
+            isVisited : `visited${animation}`,
+            isShortestPathNode : `shortestPathNode${animation}`,
+            isWeighted : `isWeighted${weight}x`
+        }
+        // const imgSource = weight == 2 ? tree1 : tree3 ;
         const addClass = 
             isStart ? 'isStart' :
                 isEnd ? 'isEnd' :
-                    isWall ? 'isWall' :
-                        isWeighted && isVisited? 'isWeighted visited' :
-                            isWeighted && isShortestPathNode ? 'isWeighted shortestPathNode':
-                                isWeighted ? 'isWeighted' :
-                                    isVisited ?  'visited' :
-                                        isShortestPathNode ? 'shortestPathNode': ''
+                    isWall ? classOf['isWall'] :
+                        isWeighted && isVisited? `${classOf['isWeighted']} ${classOf['isVisited']}` :
+                            isWeighted && isShortestPathNode ? `${classOf['isWeighted']} ${classOf['isShortestPathNode']}`:
+                                isWeighted ? classOf['isWeighted'] :
+                                    isVisited ?  classOf['isVisited'] :
+                                        isShortestPathNode ? classOf['isShortestPathNode']: ''
         const divStyle = {
             height : `${sideLength}px`,
             width : `${sideLength}px`,
         }
-        let treeNumber = (((row*col) % 5)*row)%5;
   
         return(
             <td 
@@ -49,11 +58,15 @@ class Node extends React.Component {
             onMouseUp = {() => onMouseUp(row,col)}
             >
             {
-                <div className = 'imageContainer'>
-                {(isWeighted && !isWall && !isStart && !isEnd) ? 
-                        <img className = 'weightImage' src = {
-                            isWeighted ? tree1 : ''
-                        } onError = {(e) => {e.target.style.display='none'}}/>
+                <div className = {`imageContainer`}>
+                {(isWeighted && !isWall && !isStart && !isEnd && animation!='Low') ? 
+                        <img 
+                        className = {`weightImage${animation}`} 
+                        src = {
+                            isWeighted ? weight === 2 ? tree1 : tree3 : ''
+                        } 
+                        // style ={ isWeighted ? weight === 4 ? {transform:scale(1.2)} :{}: {}}
+                        onError = {(e) => {e.target.style.display='none'}}/>
                 : null}
                 </div>
             }    

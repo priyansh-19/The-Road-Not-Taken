@@ -22,34 +22,96 @@
   animation-fill-mode: forwards;
   box-shadow: 1px 1px 2px  rgb(59, 59, 59);
 }
-.visited{
-    background-color:rgba(0, 190, 218, 0.75);
-    animation-name: visitedAnimation;
+.visitedMax{
+    animation-name: visitedAnimationMax;
     animation-duration: 1.2s; 
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
    
 }
-.isWall{
+.visitedLow{
+  animation-name: visitedAnimationLow;
+  animation-duration: 1.2s; 
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;  
+}
+.visitedMedium{
+  animation-name: visitedAnimationMedium;
+  animation-duration: 1.2s; 
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;  
+}
+.isWallMax{
   transition: all 0.3s;
-  animation-name: wallAnimation;
+  animation-name: wallAnimationMax;
   animation-duration: 0.3s; 
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
   box-shadow: 2px 2px 1px  aqua, 2.5px 2.5px 6px  rgb(54, 54, 54);
 }
-.shortestPathNode{
+.isWallMedium{
+  transition: all 0.3s;
+  animation-name: wallAnimationMedium;
+  animation-duration: 0.3s; 
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  box-shadow: 2px 2px 1px  aqua, 2.5px 2.5px 6px  rgb(54, 54, 54);
+}
+.isWallLow{
+  transition: all 0.3s;
+  animation-name: wallAnimationLow;
+  animation-duration: 0.3s; 
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  box-shadow: 2px 2px 1px  aqua, 2.5px 2.5px 6px  rgb(54, 54, 54);
+}
+.shortestPathNodeMax{
   background-color: rgba(251, 253, 110, 0.979);
-  animation-name: shortestPathNodeAnimation;
+  animation-name: shortestPathNodeAnimationMax;
   animation-duration: 1s; 
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
 }
-.isWeighted{
+.shortestPathNodeMedium{
+  background-color: rgba(251, 253, 110, 0.979);
+  animation-name: shortestPathNodeAnimationMedium;
+  animation-duration: 1s; 
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+.shortestPathNodeLow{
+  background-color: rgba(251, 253, 110, 0.979);
+  animation-name: shortestPathNodeAnimationLow;
+  animation-duration: 1s; 
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+/* .isWeighted1x{
+  background-color: rgba(178, 247, 164, 0.646);
+  box-shadow: 3px 3px 2px  rgb(138, 137, 137), 3px 3px 6px  rgb(103, 103, 103);
+  border-radius: 200%;
+} */
+.isWeighted2x{
   background-color: rgba(178, 247, 164, 0.646);
   box-shadow: 3px 3px 2px  rgb(138, 137, 137), 3px 3px 6px  rgb(103, 103, 103);
   border-radius: 200%;
 }
+.isWeighted4x{
+  background-color: rgba(255, 229, 126, 0.81);
+  box-shadow: 3px 3px 2px  rgb(138, 137, 137), 3px 3px 6px  rgb(103, 103, 103);
+  border-radius: 200%;
+}
+.isWeighted6x{
+  background-color: rgb(245, 188, 255);
+  box-shadow: 3px 3px 2px  rgb(138, 137, 137), 3px 3px 6px  rgb(103, 103, 103);
+  border-radius: 200%;
+}
+.isWeighted10x{
+  background-color: rgba(138, 236, 238, 0.952);
+  box-shadow: 3px 3px 2px  rgb(138, 137, 137), 3px 3px 6px  rgb(103, 103, 103);
+  border-radius: 200%;
+}
+
 .imageContainer{
   position: relative;
   max-height: 100%;
@@ -59,9 +121,36 @@
   align-items: center;
   justify-content: center;
 }
-.weightImage{
+
+.weightImageMax{
   position: absolute;
-  animation :  treeMovement 6s ease infinite 2s , addTree 0.5s ease-in-out;
+  animation :  treeMovement 5s ease infinite 2s , addTree 0.5s ease-in-out;
+  height: 45px;
+  width:30px ;
+  bottom: 8px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.weightImageMedium{
+  position: absolute;
+  /* animation :  treeMovement 6s ease infinite 2s , addTree 0.5s ease-in-out; */
+  height: 45px;
+  width:30px ;
+  bottom: 8px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.weightImageLow{
+  position: absolute;
+  /* animation :  treeMovement 6s ease infinite 2s , addTree 0.5s ease-in-out; */
   height: 45px;
   width:30px ;
   bottom: 8px;
@@ -73,7 +162,7 @@
   user-select: none;
 }
 
-  @keyframes visitedAnimation {
+  @keyframes visitedAnimationMax {
     0% {
       transform: scale(0.3);
       background-color: rgba(250, 132, 214, 0.979);
@@ -92,11 +181,60 @@
     100% {
       transform: scale(1);
       background-color: rgba(98, 245, 230, 0.823);
+      background-color: rgba(103, 227, 255, 0.938);
+      
       box-shadow: 1.4px 1.4px 2px  rgb(56, 56, 56);
 
     }
   }
-  @keyframes wallAnimation {
+  @keyframes visitedAnimationLow {
+    0% {
+      background-color: rgb(154, 137, 250);
+    }
+    10%{
+    }
+    50% {
+      /* background-color: rgba(32, 193, 238, 0.837); */
+      background-color: rgba(63, 140, 235, 0.75);
+    }
+  
+    75% {
+      /* transform: scale(1.2); */
+    }
+
+    100% {
+      /* transform: scale(1); */
+      background-color: rgba(103, 227, 255, 0.938);
+      box-shadow: 1.4px 1.4px 2px  rgb(56, 56, 56);
+
+    }
+  }
+  @keyframes visitedAnimationMedium {
+    0% {
+      /* transform: scale(0.6); */
+      background-color: rgba(250, 132, 214, 0.979);
+      border-radius: 100%;
+    }
+  
+    50% {
+      background-color: rgba(32, 193, 238, 0.837);
+    }
+  
+    75% {
+      transform: scale(1.1);
+      background-color: rgba(34, 227, 230, 0.75);
+    }
+
+    100% {
+      transform: scale(1);
+      background-color: rgba(98, 245, 230, 0.823);
+      background-color: rgba(103, 227, 255, 0.938);
+      box-shadow: 1.4px 1.4px 2px  rgb(56, 56, 56);
+
+    }
+  }
+
+  @keyframes wallAnimationMax {
     0%{
       transform: scale(0);
       background-color: aqua 
@@ -110,6 +248,30 @@
     100% {
       transform: scale(1);
       background-color :black
+    }
+  }
+  @keyframes wallAnimationMedium {
+    0%{
+      transform: scale(0);
+      background-color :black
+    }
+    75% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+      background-color :black
+    }
+  }
+
+  @keyframes wallAnimationLow {
+    0%{
+      background-color :rgb(23, 23, 23)
+
+    }
+    100% {
+      transform: scale(1);
+      background-color :rgb(23, 23, 23)
     }
 
   }
@@ -144,7 +306,7 @@
 
     }
   }
-  @keyframes shortestPathNodeAnimation{
+  @keyframes shortestPathNodeAnimationMax{
     0% {
       transform: scale(0.3);
       background-color: rgba(248, 54, 103, 0.979);
@@ -166,6 +328,36 @@
       background-color: rgba(252, 255, 45, 0.979);
       box-shadow: 1px 1px 2px  rgb(0, 0, 0);
       /* border-radius: 15%; */
+    }
+  }
+  @keyframes shortestPathNodeAnimationMedium{
+    50% {
+      background-color: rgba(73, 231, 136, 0.75);
+    }
+  
+    75% {
+      transform: scale(1.2);
+      background-color: rgba(73, 231, 136, 0.75);
+    }
+  
+    100% {
+      transform: scale(1);
+      background-color: rgba(252, 255, 45, 0.979);
+      box-shadow: 1px 1px 2px  rgb(0, 0, 0);
+    }
+  }
+  @keyframes shortestPathNodeAnimationLow{
+    50% {
+      background-color: rgba(251, 253, 110, 0.979);
+    }
+  
+    75% {
+      background-color: rgba(73, 231, 136, 0.75);
+    }
+  
+    100% {
+      background-color: rgba(252, 255, 45, 0.979);
+      box-shadow: 1px 1px 2px  rgb(0, 0, 0);
     }
   }
   @keyframes treeMovement{
