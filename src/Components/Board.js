@@ -10,6 +10,7 @@ import { algorithmDijkstras } from '../Algorithms/Dijkstras';
 import {algorithmAstar} from '../Algorithms/Astar';
 import {algorithmBellmanFord} from '../Algorithms/BellmanFord';
 import {algorithmSPFA} from '../Algorithms/SPFA';
+import {algorithmBFS2D} from '../Algorithms/BFS2D';
 
 
 const algorithmList = {
@@ -19,6 +20,7 @@ DFS:algorithmDFS,
 Astar:algorithmAstar,
 BellmanFord : algorithmBellmanFord,
 SPFA : algorithmSPFA,
+BFS2D : algorithmBFS2D,
 };
 const cellSizeMap = {
     Small: 1,

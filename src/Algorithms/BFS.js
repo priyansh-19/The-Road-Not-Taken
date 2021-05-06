@@ -9,7 +9,6 @@
         const parent = new Array(yNodes).fill(0).map(() => new Array(xNodes).fill([-1,-1]));
          //implement queue using a vector/array
         q1.push([startY,startX]);
-        q1.push([-1,-1]);
         parent[startY][startX] = [startY,startX];
         let found = false;
 
@@ -37,7 +36,7 @@
                 if(newX < xNodes && newX >=0 && newY < yNodes && newY >=0 && !vis[newY][newX] && !nodes[newY][newX].isWall){
                     q1.push([newY,newX]);
                     vis[newY][newX] = 1;
-                    if( Math.abs(newY-i)+Math.max(newX-j) >= 2){console.log('here');}
+                    // if( Math.abs(newY-i)+Math.max(newX-j) >= 2){console.log('here');}
                     parent[newY][newX] = [i,j];
                 }
             }

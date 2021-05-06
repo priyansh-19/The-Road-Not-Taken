@@ -6,6 +6,7 @@
     justify-content: center;
     border-radius: 15%;
     padding: 0px;
+    
 }
 .isStart{
   background-color: rgb(122, 222, 233);
@@ -147,22 +148,22 @@
 }
 
 .isWeighted2x{
-  background-color: rgba(178, 247, 164, 0.646);
+  background-color: rgba(178, 247, 164,0.7);
   box-shadow: 3px 3px 2px  rgb(138, 137, 137), 3px 3px 6px  rgb(103, 103, 103);
   border-radius: 200%;
 }
 .isWeighted4x{
-  background-color: rgba(255, 229, 126, 0.81);
+  background-color: rgba(255, 229, 126,0.9);
   box-shadow: 3px 3px 2px  rgb(138, 137, 137), 3px 3px 6px  rgb(103, 103, 103);
   border-radius: 200%;
 }
 .isWeighted6x{
-  background-color: rgb(245, 188, 255);
+  background-color: rgb(245, 188, 255,0.9);
   box-shadow: 3px 3px 2px  rgb(138, 137, 137), 3px 3px 6px  rgb(103, 103, 103);
   border-radius: 200%;
 }
 .isWeighted10x{
-  background-color: rgba(241, 239, 239, 0.952);
+  background-color: rgba(241, 239, 239);
   box-shadow: 3px 3px 2px  rgb(138, 137, 137), 3px 3px 6px  rgb(103, 103, 103);
   border-radius: 200%;
 }
