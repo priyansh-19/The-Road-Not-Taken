@@ -8,6 +8,8 @@ import {algorithmBFS} from '../Algorithms/BFS';
 import {algorithmDFS} from '../Algorithms/DFS';
 import { algorithmDijkstras } from '../Algorithms/Dijkstras';
 import {algorithmAstar} from '../Algorithms/Astar';
+import {algorithmBellmanFord} from '../Algorithms/BellmanFord';
+import {algorithmSPFA} from '../Algorithms/SPFA';
 
 
 const algorithmList = {
@@ -15,6 +17,8 @@ Dijkstras:algorithmDijkstras,
 BFS:algorithmBFS,
 DFS:algorithmDFS,
 Astar:algorithmAstar,
+BellmanFord : algorithmBellmanFord,
+SPFA : algorithmSPFA,
 };
 const cellSizeMap = {
     Small: 1,
@@ -38,7 +42,7 @@ class Board extends React.Component {
             isMouseClickedFor:'',
             moveStart:false,
             moveEnd:false,
-            isSelectedAlgorithm:'Astar',
+            isSelectedAlgorithm:'BellmanFord',
             viewPortWidth:window.innerWidth,
             viewPortHeight:window.innerHeight,
             pathFoundState : -1,
@@ -126,8 +130,6 @@ class Board extends React.Component {
             nodes[row][col].weight = parseInt(this.state.weight.slice(0,-1));
             nodes[row][col].isWeighted ^= 1;
             this.setState({nodes,isMouseClicked:true,isMouseClickedFor:'weight'});
-            // console.log(nodes[row][col].weight);
-
         }
         else{
         nodes[row][col].isWall ^= 1;
@@ -223,7 +225,7 @@ class Board extends React.Component {
         return node;
     }
 
-    createNewGrid = (node,renderState) =>{
+    createNewGrid = (node,renderState,comparisons) =>{
         const i = node[0];
         const j = node[1];
         let {nodes,yNodes,xNodes,nodesVisited,pathNodes,pathWeight} = this.state;
@@ -232,6 +234,8 @@ class Board extends React.Component {
             
             if(renderState === 0 ) { nodes[i][j].isVisited = true; nodes[i][j].isShortestPathNode = false; nodesVisited++; }
             else if(renderState === 1) {nodes[i][j].isShortestPathNode = true; nodes[i][j].isVisited = false; pathNodes++; pathWeight += nodes[i][j].weight;}
+            if(comparisons!=-1)nodesVisited = comparisons;
+
         }
         this.setState({nodes,nodesVisited,pathNodes,pathWeight});
     }
@@ -244,18 +248,20 @@ class Board extends React.Component {
         const path = paths[0];
         const shortestPath = paths[1]; 
         const pathFoundState = paths[2] ? 1 : 0;
-        if(pathFoundState){shortestPath.push([this.state.endY,this.state.endX]); shortestPath.unshift([this.state.startY,this.state.startX]);}
+        // const comparisons = (isSelectedAlgorithm == 'BellmanFord' && pathFoundState) ? paths[3] : 0;
+        const comparisons = paths.length == 4 ? paths[3] : -1;
+        if(pathFoundState){shortestPath.push([this.state.endY,this.state.endX]); }
         const ms = 40;
         const ms2 = 30;
         for(let i = 0;i<path.length;i++){
             setTimeout( () =>{
-                this.createNewGrid(path[i],0);
+                this.createNewGrid(path[i],0,comparisons);
             }, i*(ms));
         }
         const timeElaspsed = path.length*ms;
         for(let i = 0;i<shortestPath.length;i++){
             setTimeout( () =>{
-                this.createNewGrid(shortestPath[i],1);
+                this.createNewGrid(shortestPath[i],1,comparisons);
             }, timeElaspsed + i*(ms2));
         }
         setTimeout( ()=>{

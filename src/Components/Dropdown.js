@@ -9,7 +9,7 @@ const Dropdown = (props) =>{
     const {setCellSize} = props.functions;
     const {setAnimation} = props.functions;
     const {setWeight} = props.functions;
-    const ref = useRef();
+    const ref = useRef(null);
    
     //event bubbling has been used here
     // console.log(selectedItem,props.selectedItem,'final check');
@@ -36,7 +36,7 @@ const Dropdown = (props) =>{
                    return(
                     <div
                     //set selection takes time, hence used props.selectedItem == item 
-                    onClick ={()=>{setSelectedItem(item);;activeFunction(item)}}
+                    onClick ={()=>{setSelectedItem(item); activeFunction(item)}}
                     className = 'dd-list-item-wrapper'>
                         <li className = {`dd-list-item ${selectedItem === item ? 'isSelectedItem' : ''}`}>{item}</li>
                     </div>

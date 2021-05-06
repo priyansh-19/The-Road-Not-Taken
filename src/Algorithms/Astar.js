@@ -42,8 +42,8 @@ export const algorithmAstar = (values) =>{
         }
         path.push([i,j]);
         for(let k=0;k<4 ;k++){
-            const newY = adj[k][0] + i;
-            const newX = adj[k][1] + j;
+                const newY = adj[k][0] + i;
+                const newX = adj[k][1] + j;
           
             if(newX < xNodes && newX >=0 && newY < yNodes && newY >=0 && !vis[newY][newX] && !nodes[newY][newX].isWall){
                 const gNew = distance[i][j].g + nodes[newY][newX].weight;

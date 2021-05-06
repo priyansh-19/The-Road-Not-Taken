@@ -347,7 +347,6 @@
   }
   @keyframes endAnimation{
     0%{
-      /* transform: scale(0.2); */
       background-color: rgb(210, 73, 214) ;
       border-radius:100%;
     }
@@ -358,9 +357,6 @@
     100% {
       transform: scale(1);
       background-color: rgb(255, 146, 250);
-      /* border-radius: 50%; */
-
-
     }
   }
   @keyframes shortestPathNodeAnimationMax{

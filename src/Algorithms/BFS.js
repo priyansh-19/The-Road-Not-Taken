@@ -1,5 +1,5 @@
 
-        export const algorithmBFS = (values) =>{
+     export const algorithmBFS = (values) =>{
         const {startX,startY,endX,endY,xNodes,yNodes,nodes} = values;
         const path = [];
         const shortestPath = [];

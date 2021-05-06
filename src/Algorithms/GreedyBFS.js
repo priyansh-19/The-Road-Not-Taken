@@ -50,7 +50,7 @@
                 shortestPath.push([currentY,currentX]);
             }
             shortestPath.reverse();
-            return [path,shortestPath,found];
+            return [path,shortestPath,found,];
             
         }
         
