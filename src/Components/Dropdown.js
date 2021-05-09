@@ -8,11 +8,12 @@ const Dropdown = (props) =>{
     const {header,list} = props.values;
     const {setCellSize} = props.functions;
     const {setAnimation} = props.functions;
+    const {setSpeed} = props.functions;
+    const {clear} = props.functions;
     const {setWeight} = props.functions;
     const ref = useRef(null);
    
     //event bubbling has been used here
-    // console.log(selectedItem,props.selectedItem,'final check');
     useEffect( ()=>{
         document.body.addEventListener('click',(event)=>{
             if(ref.current.contains(event.target)){return;}
@@ -20,7 +21,7 @@ const Dropdown = (props) =>{
         })
     },[flag]);
 
-    const activeFunction = header === 'Cell Size' ? setCellSize : header === 'Animation' ? setAnimation : header === 'Weight' ? setWeight : '';
+    const activeFunction = header === 'Cell Size' ? setCellSize : header === 'Animation' ? setAnimation : header === 'Weight' ? setWeight : header == 'Clear' ? clear : header ==='Speed'? setSpeed : '';
     return(
         <li 
         ref = {ref}

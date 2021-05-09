@@ -27,6 +27,11 @@ const cellSizeMap = {
     Medium : 1.25,
     Large : 1.7
 }
+const speedMap = {
+    'Slow' : 50,
+    'Medium' : 35,
+    'Fast' : 10,
+}
 class Board extends React.Component {
 
     constructor(){
@@ -44,7 +49,7 @@ class Board extends React.Component {
             isMouseClickedFor:'',
             moveStart:false,
             moveEnd:false,
-            isSelectedAlgorithm:'BellmanFord',
+            isSelectedAlgorithm:'BFS',
             viewPortWidth:window.innerWidth,
             viewPortHeight:window.innerHeight,
             pathFoundState : -1,
@@ -54,10 +59,16 @@ class Board extends React.Component {
             pathNodes : 0,
             numberOfCells : xNodes*yNodes,
             pathWeight:0,
+            isThereWeight : false,
+            isThereNegativeWeight:false,
+            renderInstantPath : false,
+            isPathVisualized : false,
 
             cellSize : 'Medium',
             animation : 'Max',
             weight : '2x',
+            speed : 'Fast',
+            shortestPathSpeed : '30',
             nodes:[]
         });
     }
@@ -146,11 +157,30 @@ class Board extends React.Component {
         if(!this.state.isMouseClicked ){return;}
         const {nodes} = this.state;
 
-        if(this.state.moveStart){
+        if(this.state.moveStart && !nodes[row][col].isWeighted && !nodes[row][col].isEnd){
+            // nodes[row][col].isWeighted = false;
+            // nodes[row][col].weight = 1;
             nodes[row][col].isStart = true;
+            if(this.state.isPathVisualized){
+                this.setState({nodes,startY:row,startX:col,renderInstantPath:true});
+                this.visualizeAlgorithm(true,true);
+            }
+            else{
+                this.setState({nodes,startY:row,startX:col});
+            }
         }
         else if(this.state.moveEnd){
+            nodes[row][col].isWeighted = false;
+            nodes[row][col].weight = 1;
             nodes[row][col].isEnd = true;
+            if(this.state.isPathVisualized){
+                this.setState({nodes,endY:row,endX:col,renderInstantPath:true});
+                this.visualizeAlgorithm(true,true);
+            }
+            else{
+                this.setState({nodes,endY:row,endX:col});
+            }
+
         }
         else if( (row === startY && col === startX) || (row === endY && col === endX) ){
             // do nothing
@@ -219,6 +249,7 @@ class Board extends React.Component {
             isStart:isStart,
             isEnd:isEnd,
             isVisited:false,
+            isVisitedTarget:false,
             isWall:false,
             isShortestPathNode:false,
             isWeighted:false,
@@ -227,49 +258,44 @@ class Board extends React.Component {
         return node;
     }
 
-    createNewGrid = (node,renderState,comparisons) =>{
-        const i = node[0];
-        const j = node[1];
-        let {nodes,yNodes,xNodes,nodesVisited,pathNodes,pathWeight} = this.state;
-        
-        if(i < yNodes && j< xNodes && i>= 0 && j>=0 ){
-            
-            if(renderState === 0 ) { nodes[i][j].isVisited = true; nodes[i][j].isShortestPathNode = false; nodesVisited++; }
-            else if(renderState === 1) {nodes[i][j].isShortestPathNode = true; nodes[i][j].isVisited = false; pathNodes++; pathWeight += nodes[i][j].weight;}
-            if(comparisons!=-1)nodesVisited = comparisons;
+    createNewGrid = async (path,renderState,comparisons, renderAtOnce = false) =>{
+        let {nodes,nodesVisited,pathNodes,pathWeight} = this.state;
 
-        }
-        this.setState({nodes,nodesVisited,pathNodes,pathWeight});
+            for(let node of path){
+                let i = node[0];
+                let j = node[1];
+                const type = node.length == 3 ? node[2] : 0;
+
+                    if(renderState === 0 ) { if(type == 0)nodes[i][j].isVisited = true; if(type == 1) nodes[i][j].isVisitedTarget = true; nodes[i][j].isShortestPathNode = false; nodesVisited++; }
+                    else if(renderState === 1) {nodes[i][j].isShortestPathNode = true; nodes[i][j].isVisited = false; nodes[i][j].isVisitedTarget = false;pathNodes++; pathWeight += nodes[i][j].weight;}
+                    if(comparisons!=-1)nodesVisited = comparisons;
+
+                    if(!renderAtOnce){
+                        let delayPath = speedMap[this.state.speed];
+                        let delayShortestPath = this.state.shortestPathSpeed;
+                        let delay = renderState === 0 ? delayPath : delayShortestPath;
+                        this.setState({nodes,nodesVisited,pathNodes,pathWeight});
+                        await new Promise(r => setTimeout(r,delay));
+                    }
+            }
+            this.setState({nodes,nodesVisited,pathNodes,pathWeight,isPathVisualized:true});
+            return;
+    
     }
 
-    visualizeAlgorithm = () =>{
-        this.clearPath('path');
-        this.setState({pathFoundState:-1});
+    visualizeAlgorithm = async (event, isMoved) =>{
+        await this.clearPath('Path');
+        if(!isMoved) this.setState({pathFoundState:-1,renderInstantPath:false});
         const {isSelectedAlgorithm} = this.state;
         const paths = algorithmList[isSelectedAlgorithm](this.state);
         const path = paths[0];
         const shortestPath = paths[1]; 
         const pathFoundState = paths[2] ? 1 : 0;
-        // const comparisons = (isSelectedAlgorithm == 'BellmanFord' && pathFoundState) ? paths[3] : 0;
         const comparisons = paths.length == 4 ? paths[3] : -1;
-        if(pathFoundState){shortestPath.push([this.state.endY,this.state.endX]); }
-        const ms = 40;
-        const ms2 = 30;
-        for(let i = 0;i<path.length;i++){
-            setTimeout( () =>{
-                this.createNewGrid(path[i],0,comparisons);
-            }, i*(ms));
-        }
-        const timeElaspsed = path.length*ms;
-        for(let i = 0;i<shortestPath.length;i++){
-            setTimeout( () =>{
-                this.createNewGrid(shortestPath[i],1,comparisons);
-            }, timeElaspsed + i*(ms2));
-        }
-        setTimeout( ()=>{
-            const message = pathFoundState ? 'Target is Reachable' : 'Target is Unreachable';
-            this.setState({pathFoundState,message});
-        },timeElaspsed + (ms2*shortestPath.length))
+        if(pathFoundState){shortestPath.push([this.state.endY,this.state.endX]);shortestPath.unshift([this.state.startY,this.state.startX]); }
+            this.clearPath('Path');
+            await this.createNewGrid(path,0,comparisons,this.state.renderInstantPath || this.state.speed == 'Instant');
+            this.createNewGrid(shortestPath,1,comparisons,this.state.renderInstantPath || this.state.speed === 'Instant');
     }
 
     selectThisAlgorithm = (algorithm) =>{
@@ -293,33 +319,39 @@ class Board extends React.Component {
     setWeight = (weight) =>{
         this.setState({weight});
     }
-
-    clearPath = (value) =>{
-        const {nodes} = this.state;
-        nodes.forEach( (row)=>{
-            row.forEach((node)=>{
-                if(value === 'path') { node.isVisited = false; node.isShortestPathNode = false; }
-                if(value === 'walls') node.isWall = false;
-                if(value === 'weights') {node.isWeighted = false; node.weight = 1;}
-            })
-        })
-        
-        this.setState({nodes,nodesVisited:0,pathNodes:0,pathWeight:0,message:''});
+    setSpeed = (speed) =>{
+        this.setState({speed});
     }
 
+    clearPath =  async (value) =>{
+        let {nodes} = this.state;
+        nodes.forEach( (row)=>{
+            row.forEach((node)=>{
+                if(value === 'Path') { node.isVisited = false; node.isVisitedTarget = false; node.isShortestPathNode = false; }
+                if(value === 'Walls') node.isWall = false;
+                if(value === 'Weights') {node.isWeighted = false; node.weight = 1;}
+                if(value === 'All'){node.isWall = false;node.isWeighted =false;node.weight =1;node.isVisited = false;node.isVisitedTarget = false;node.isShortestPathNode=false;}
+            })
+        });
+        this.setState({nodes,nodesVisited:0,pathNodes:0,pathWeight:0,isPathVisualized:false});
+        
+       if(this.state.speed === 'Instant' && (!this.state.renderInstantPath)) await new Promise(r => setTimeout(r,));
+        // await new Promise(r => setTimeout(r,20*(this.state.speed === 'Instant' && (!this.state.renderInstantPath))));
+    }
     render(){
-        // console.log('full rerender');
         const {nodes} = this.state;
         return (
             <div className="screen">
             <Header 
-            onClickVisualize = {this.visualizeAlgorithm}
-            clear = {this.clearPath}
-            animation = {this.state.animation}
-            setCellSize = {this.setCellSize}
-            setAnimation = {this.setAnimation}
-            setWeight = {this.setWeight}
+                onClickVisualize = {this.visualizeAlgorithm}
+                clear = {this.clearPath}
+                animation = {this.state.animation}
+                setCellSize = {this.setCellSize}
+                setAnimation = {this.setAnimation}
+                setWeight = {this.setWeight}
+                setSpeed = {this.setSpeed}
             >Visualize</Header>
+
             <div className="mainArea">
                 <AlgorithmList
                     algorithmList = {algorithmList}
@@ -332,7 +364,7 @@ class Board extends React.Component {
                         {nodes.map( (row,i) => {
                             return <tr key = {i}>
                                 {row.map((node,j) => {
-                                    const {row,col,isStart,isEnd,isVisited,isWall,isShortestPathNode,weight,isWeighted} = node;
+                                    const {row,col,isStart,isEnd,isVisited,isVisitedTarget,isWall,isShortestPathNode,weight,isWeighted} = node;
                                     return <Node 
                                         key = {`${i} + ${j}`}
                                         row = {row}
@@ -344,12 +376,13 @@ class Board extends React.Component {
                                         isEnd = {isEnd}
                                         isWall = {isWall}
                                         isVisited = {isVisited}
+                                        isVisitedTarget = {isVisitedTarget}
                                         isShortestPathNode = {isShortestPathNode}
                                         onMouseDown = {this.onMouseDown}
                                         onMouseEnter = {this.onMouseEnter}
                                         onMouseLeave = {this.onMouseLeave}
                                         onMouseUp = {this.onMouseUp}
-                                        animation = {this.state.animation}
+                                        animation = {this.state.speed === 'Instant' || this.state.renderInstantPath ? 'None' : this.state.animation}
                                     />
                                     })
                                 }

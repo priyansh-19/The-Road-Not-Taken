@@ -14,19 +14,28 @@ class Header extends React.Component {
 
                <div className = 'leftHeader2'>
                     <li
-                        onClick = { () => {this.props.clear('path')}}
+                        onClick = { () => {this.props.clear('Path')}}
                         className = 'clearButton'
                         > Clear Path </li>
 
-                    <li
-                        onClick = {() =>{this.props.clear('walls')}}
+                    {/* <li
+                        onClick = {() =>{this.props.clear('Walls')}}
                         className = 'clearButton'
-                        > Clear Walls </li>
+                        > Clear Walls </li> */}
 
-                        <li
-                        onClick = {() =>{this.props.clear('weights')}}
-                        className = 'clearButton'
-                        > Clear Weights </li>
+                        <Dropdown
+                            functions = {{setSpeed:this.props.setSpeed,}}
+                            values = {{header:'Speed',list:['Slow','Medium','Fast','Instant','Custom']}}
+                            selectedItem = 'Fast'
+                            class = 'clearButton'
+                        />
+
+                        <Dropdown
+                            functions = {{clear:this.props.clear}}
+                            values = {{header:'Clear',list:['All','Path','Walls','Weights']}}
+                            selectedItem = 'Path'
+                            class = 'clearButton'
+                        />
                </div>
                 
                 <li 
@@ -50,7 +59,7 @@ class Header extends React.Component {
                         />
                         <Dropdown
                             functions = {{setAnimation : this.props.setAnimation,}} 
-                            values = {{header:'Animation', list:['Low','Medium','Max'] } }
+                            values = {{header:'Animation', list:['Low','Medium','Max','None'] } }
                             selectedItem = {this.props.animation}
                            
                         />

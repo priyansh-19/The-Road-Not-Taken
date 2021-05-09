@@ -1,7 +1,7 @@
 
 .node{
     border: 1px solid steelblue;
-    transition : all 0.4s; 
+    /* transition : all 0.4s;  */
     align-items: center;
     justify-content: center;
     border-radius: 15%;
@@ -89,17 +89,28 @@
     animation-fill-mode: forwards;
    
 }
+.visitedMedium{
+    animation-name: visitedAnimationMedium;
+    animation-duration: 1.2s; 
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;  
+}
 .visitedLow{
   animation-name: visitedAnimationLow;
   animation-duration: 1.2s; 
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;  
 }
-.visitedMedium{
-  animation-name: visitedAnimationMedium;
+.visitedNone{
+  background-color: rgba(103, 227, 255, 0.938);
+  box-shadow: 1.4px 1.4px 2px  rgb(56, 56, 56);
+}
+.visitedTargetMax{
+  animation-name: visitedTargetAnimationMax;
   animation-duration: 1.2s; 
   animation-timing-function: ease-out;
-  animation-fill-mode: forwards;  
+  animation-fill-mode: forwards;
+ 
 }
 .isWallMax{
   transition: all 0.3s;
@@ -125,6 +136,14 @@
   animation-fill-mode: forwards;
   box-shadow: 2px 2px 1px  aqua, 2.5px 2.5px 6px  rgb(54, 54, 54);
 }
+.isWallNone{
+  transition: all 0.3s;
+  animation-name: wallAnimationMax;
+  animation-duration: 0.3s; 
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  box-shadow: 2px 2px 1px  aqua, 2.5px 2.5px 6px  rgb(54, 54, 54);
+}
 .shortestPathNodeMax{
   background-color: rgba(251, 253, 110, 0.979);
   animation-name: shortestPathNodeAnimationMax;
@@ -145,6 +164,10 @@
   animation-duration: 1s; 
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
+}
+.shortestPathNodeNone{
+  background-color: rgba(252, 255, 45, 0.979);
+  box-shadow: 1px 1px 2px  rgb(0, 0, 0);
 }
 
 .isWeighted2x{
@@ -208,6 +231,19 @@
 .weightImageLow{
   position: absolute;
   /* animation :  treeMovement 6s ease infinite 2s , addTree 0.5s ease-in-out; */
+  height: 45px;
+  width:30px ;
+  bottom: 8px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.weightImageNone{
+  position: absolute;
+  animation :  treeMovement 5s ease infinite 2s , addTree 0.5s ease-in-out;
   height: 45px;
   width:30px ;
   bottom: 8px;
@@ -286,6 +322,31 @@
       transform: scale(1);
       background-color: rgba(98, 245, 230, 0.823);
       background-color: rgba(103, 227, 255, 0.938);
+      box-shadow: 1.4px 1.4px 2px  rgb(56, 56, 56);
+
+    }
+  }
+
+  @keyframes visitedTargetAnimationMax {
+    0% {
+      transform: scale(0.3);
+      background-color: rgba(236, 54, 84, 0.979);
+      border-radius: 100%;
+    }
+  
+    50% {
+      background-color: rgba(214, 99, 240, 0.938);
+    }
+  
+    75% {
+      transform: scale(1.2);
+      background-color: rgba(243, 70, 226, 0.938);
+    }
+
+    100% {
+      transform: scale(1);
+      background-color: rgba(255, 100, 234, 0.857);
+      
       box-shadow: 1.4px 1.4px 2px  rgb(56, 56, 56);
 
     }
@@ -451,6 +512,13 @@
       /* transform: rotateX(40deg); */
     }
   }
+  .selectDisable {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
 
 
   

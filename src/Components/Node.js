@@ -14,6 +14,7 @@ class Node extends React.Component {
             isStart,
             isEnd,
             isVisited,
+            isVisitedTarget,
             row,
             col,
             onMouseEnter,
@@ -24,14 +25,16 @@ class Node extends React.Component {
             isShortestPathNode,
             isWeighted,
             animation,
-            weight
+            weight,
             } = this.props;
-
+        
+        
         const classOf = {
             isWall : `isWall${animation}`,
             isVisited : `visited${animation}`,
             isShortestPathNode : `shortestPathNode${animation}`,
-            isWeighted : `isWeighted${weight}x`
+            isWeighted : `isWeighted${weight}x`,
+            isVisitedTarget : `visitedTarget${animation}`,
         }
         // const imgSource = weight == 2 ? tree1 : tree3 ;
         // isEnd && isShortestPathNode? `isEnd ${classOf['isShortestPathNode']}` :
@@ -42,11 +45,10 @@ class Node extends React.Component {
                 isEnd && isShortestPathNode? `isEnd ${classOf['isShortestPathNode']}` :
                     isEnd ? 'isEnd' :
                         isWall ? classOf['isWall'] :
-                        // isWeighted && isVisited? `${classOf['isWeighted']} ${classOf['isVisited']}` :
                             isWeighted && isShortestPathNode ? `${classOf['isShortestPathNode']}`:
-                                // isWeighted ? classOf['isWeighted'] :
-                                    isVisited ?  classOf['isVisited'] :
-                                        isShortestPathNode ? classOf['isShortestPathNode']: ''
+                                isVisitedTarget ? classOf['isVisitedTarget']:
+                                                isVisited ?  classOf['isVisited'] :
+                                                        isShortestPathNode ? classOf['isShortestPathNode']: ''
         const divStyle = {
             height : `${sideLength}px`,
             width : `${sideLength}px`,
@@ -54,7 +56,7 @@ class Node extends React.Component {
   
         return(
             <td 
-            className = {`node ${addClass}`} 
+            className = {`node ${addClass} .selectDisable`} 
             id = {`${row}${col}`}
             style = {divStyle}
             onMouseEnter = {(e) => onMouseEnter(row,col,e)}
@@ -67,7 +69,8 @@ class Node extends React.Component {
                 <div className = { (isEnd  || isStart) ? `imageContainerSE` : `imageContainer ${isWeighted ? classOf['isWeighted'] : ''}`}>
                 {(isWeighted && !isWall && !isStart && !isEnd && animation!='Low' && !isShortestPathNode) ? 
                         <img 
-                        className = {`weightImage${animation}`} 
+                        draggable = "false" 
+                        className = {`weightImage${animation} selectDisable`} 
                         src = {
                             isWeighted  ? weight === 2 ? tree1 : tree3 : ''
                         } 

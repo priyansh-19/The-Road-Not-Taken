@@ -48,7 +48,7 @@
                         resNodeTarget = [newY,newX];
                         found = true; break;
                     }
-                    path.push([newY,newX]);
+                    path.push([newY,newX,0]);
                     q1.push([newY,newX]);
                     vis[newY][newX] = 1;
                     parent[newY][newX] = [i1,j1];
@@ -61,7 +61,7 @@
                         resNodeTarget = [i2,j2];
                         found = true; break;
                     }
-                    path.push([newY,newX]);
+                    path.push([newY,newX,1]);
                     q2.push([newY,newX]);
                     vis[newY][newX] = 2;
                     parent[newY][newX] = [i2,j2];
