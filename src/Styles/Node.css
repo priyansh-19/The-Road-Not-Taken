@@ -10,10 +10,10 @@
 }
 .isStart{
   background-color: rgb(122, 222, 233);
-  animation-name: startAnimation;
+  /* animation-name: startAnimation;
   animation-duration: 0.8s; 
   animation-timing-function: ease-out;
-  animation-fill-mode: forwards;
+  animation-fill-mode: forwards; */
   box-shadow: 1px 1px 2px  rgb(59, 59, 59);
   border-radius: 100%;
   display: flex;
@@ -135,10 +135,11 @@
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
   box-shadow: 2px 2px 1px  aqua, 2.5px 2.5px 6px  rgb(54, 54, 54);
+
 }
 .isWallNone{
   transition: all 0.3s;
-  animation-name: wallAnimationMax;
+  animation-name: wallAnimationLow;
   animation-duration: 0.3s; 
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
@@ -227,6 +228,7 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  
 }
 .weightImageLow{
   position: absolute;
@@ -243,7 +245,7 @@
 }
 .weightImageNone{
   position: absolute;
-  animation :  treeMovement 5s ease infinite 2s , addTree 0.5s ease-in-out;
+  /* animation :  treeMovement 5s ease infinite 2s , addTree 0.5s ease-in-out; */
   height: 45px;
   width:30px ;
   bottom: 8px;
@@ -384,12 +386,11 @@
 
   @keyframes wallAnimationLow {
     0%{
-      background-color :rgb(23, 23, 23)
-
+      background-color: black 
     }
     100% {
       transform: scale(1);
-      background-color :rgb(23, 23, 23)
+      background-color :black
     }
 
   }

@@ -16,7 +16,7 @@ const Dropdown = (props) =>{
     //event bubbling has been used here
     useEffect( ()=>{
         document.body.addEventListener('click',(event)=>{
-            if(ref.current.contains(event.target)){return;}
+            if(ref.current && ref.current.contains(event.target)){return;}
             setFlag(false);
         })
     },[flag]);
@@ -29,7 +29,7 @@ const Dropdown = (props) =>{
         className = 'clearButton dd-wrapper'>
                {header}
                <img class = 'drop-down-svg' src = {dropDownArrow}/>
-            <div 
+            <div
             className = {`dd-list-wrapper ${flag ? 'openList' : 'closeList'}`}>
                { 
                list.map((item)=>{
@@ -39,7 +39,7 @@ const Dropdown = (props) =>{
                     //set selection takes time, hence used props.selectedItem == item 
                     onClick ={()=>{setSelectedItem(item); activeFunction(item)}}
                     className = 'dd-list-item-wrapper'>
-                        <li className = {`dd-list-item ${selectedItem === item ? 'isSelectedItem' : ''}`}>{item}</li>
+                        <li className = {`dd-list-item ${selectedItem === item ? 'isSelectedItem' : ''}`}>{item}</li>       
                     </div>
                    )
                })

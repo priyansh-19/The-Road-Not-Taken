@@ -3,7 +3,9 @@ import Node from './Node';
 import '../Styles/Board.css'
 import Header from './Header'
 import AlgorithmList from './AlgorithmList';
-import Stats from './Stats'
+import Stats from './Stats';
+import CustomInputForm from './Form';
+import Slider from './Slider';
 import {algorithmBFS} from '../Algorithms/BFS';
 import {algorithmDFS} from '../Algorithms/DFS';
 import { algorithmDijkstras } from '../Algorithms/Dijkstras';
@@ -31,6 +33,7 @@ const speedMap = {
     'Slow' : 50,
     'Medium' : 35,
     'Fast' : 10,
+    'Instant' : -1,
 }
 class Board extends React.Component {
 
@@ -63,12 +66,13 @@ class Board extends React.Component {
             isThereNegativeWeight:false,
             renderInstantPath : false,
             isPathVisualized : false,
+            isSpeedCustom : false,
 
             cellSize : 'Medium',
             animation : 'Max',
             weight : '2x',
-            speed : 'Fast',
-            shortestPathSpeed : '30',
+            speed : 20,
+            shortestPathSpeed : 30,
             nodes:[]
         });
     }
@@ -153,6 +157,7 @@ class Board extends React.Component {
     }
 
     onMouseEnter = (row,col,e) =>{
+        // e.preventDefault();
         const {startY,endY,startX,endX} = this.state;
         if(!this.state.isMouseClicked ){return;}
         const {nodes} = this.state;
@@ -193,10 +198,10 @@ class Board extends React.Component {
             nodes[row][col].isWeighted = true;
         }
         else{
-        if(this.state.isMouseClickedFor !== 'wall'){return;}
-        nodes[row][col].isWall = true;
-        nodes[row][col].isWeighted = false;
-
+            if(this.state.isMouseClickedFor === 'wall'){
+                nodes[row][col].isWall = true;
+                nodes[row][col].isWeighted = false;
+            }
         }
         this.setState({nodes})
     }
@@ -271,7 +276,7 @@ class Board extends React.Component {
                     if(comparisons!=-1)nodesVisited = comparisons;
 
                     if(!renderAtOnce){
-                        let delayPath = speedMap[this.state.speed];
+                        let delayPath = this.state.speed;
                         let delayShortestPath = this.state.shortestPathSpeed;
                         let delay = renderState === 0 ? delayPath : delayShortestPath;
                         this.setState({nodes,nodesVisited,pathNodes,pathWeight});
@@ -294,8 +299,9 @@ class Board extends React.Component {
         const comparisons = paths.length == 4 ? paths[3] : -1;
         if(pathFoundState){shortestPath.push([this.state.endY,this.state.endX]);shortestPath.unshift([this.state.startY,this.state.startX]); }
             this.clearPath('Path');
-            await this.createNewGrid(path,0,comparisons,this.state.renderInstantPath || this.state.speed == 'Instant');
-            this.createNewGrid(shortestPath,1,comparisons,this.state.renderInstantPath || this.state.speed === 'Instant');
+            await this.createNewGrid(path,0,comparisons,this.state.renderInstantPath || this.state.speed == -1);
+            await this.createNewGrid(shortestPath,1,comparisons,this.state.renderInstantPath || this.state.speed === -1);
+            this.setState({pathFoundState:1})
     }
 
     selectThisAlgorithm = (algorithm) =>{
@@ -320,7 +326,19 @@ class Board extends React.Component {
         this.setState({weight});
     }
     setSpeed = (speed) =>{
-        this.setState({speed});
+        console.log('speed' ,speed, typeof(speed));
+        
+        if(speed === 'Custom'){
+            this.setState({isSpeedCustom:true,})
+        }
+        else{
+            let x = speed;
+            x = (typeof(speed) === 'number') ? speed : speedMap[speed];
+            let y = typeof(speed) !== 'string' ;
+            let z = speed === 'Instant' ? 'None' : 'Max';
+            this.setState({speed:x,isSpeedCustom : y,animation : z})
+        }
+        
     }
 
     clearPath =  async (value) =>{
@@ -335,10 +353,12 @@ class Board extends React.Component {
         });
         this.setState({nodes,nodesVisited:0,pathNodes:0,pathWeight:0,isPathVisualized:false});
         
-       if(this.state.speed === 'Instant' && (!this.state.renderInstantPath)) await new Promise(r => setTimeout(r,));
+       if(this.state.speed === -1 && (!this.state.renderInstantPath)) await new Promise(r => setTimeout(r,));
         // await new Promise(r => setTimeout(r,20*(this.state.speed === 'Instant' && (!this.state.renderInstantPath))));
     }
     render(){
+        console.log('render',this.state.speed);
+        // console.log(this.state.renderInstantPath)
         const {nodes} = this.state;
         return (
             <div className="screen">
@@ -352,7 +372,19 @@ class Board extends React.Component {
                 setSpeed = {this.setSpeed}
             >Visualize</Header>
 
+            <div className = 'mid-area-div'>
+                { (this.state.isSpeedCustom) ? 
+                // <div>Yes it works</div>
+                    <Slider
+                    setSpeed = {this.setSpeed}
+                    />
+                    // <CustomInputForm
+                    //     setSpeed ={ this.setSpeed}
+                    // />
+                 : null } 
+            </div>
             <div className="mainArea">
+                
                 <AlgorithmList
                     algorithmList = {algorithmList}
                     isSelectedAlgorithm = {this.state.isSelectedAlgorithm}
@@ -360,7 +392,7 @@ class Board extends React.Component {
                 />
                 <table className = {`mainGrid onChangeMainGrid ${this.state.pathFoundState === 1 ? 'onPathFound' : this.state.pathFoundState === 0 ? 'onPathNotFound' : ''}`}>
                     {/* <div class = 'messageToUser' >{this.state.message}</div> */}
-                    <tbody>
+                    <tbody className = "table-body">
                         {nodes.map( (row,i) => {
                             return <tr key = {i}>
                                 {row.map((node,j) => {
@@ -382,7 +414,7 @@ class Board extends React.Component {
                                         onMouseEnter = {this.onMouseEnter}
                                         onMouseLeave = {this.onMouseLeave}
                                         onMouseUp = {this.onMouseUp}
-                                        animation = {this.state.speed === 'Instant' || this.state.renderInstantPath ? 'None' : this.state.animation}
+                                        animation = {this.state.renderInstantPath ? 'None' : this.state.animation}
                                     />
                                     })
                                 }

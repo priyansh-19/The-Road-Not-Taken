@@ -36,8 +36,6 @@ class Node extends React.Component {
             isWeighted : `isWeighted${weight}x`,
             isVisitedTarget : `visitedTarget${animation}`,
         }
-        // const imgSource = weight == 2 ? tree1 : tree3 ;
-        // isEnd && isShortestPathNode? `isEnd ${classOf['isShortestPathNode']}` :
 
         const addClass = 
         isStart && isShortestPathNode? `isStart ${classOf['isShortestPathNode']}` :
@@ -56,20 +54,20 @@ class Node extends React.Component {
   
         return(
             <td 
-            className = {`node ${addClass} .selectDisable`} 
-            id = {`${row}${col}`}
-            style = {divStyle}
-            onMouseEnter = {(e) => onMouseEnter(row,col,e)}
-            onMouseDown = {(e) => onMouseDown(row,col,e)}
-            onMouseLeave = {(e) => onMouseLeave(row,col,e)}
-            onMouseUp = {() => onMouseUp(row,col)}
+                className = {`node ${addClass} .selectDisable`} 
+                id = {`${row}${col}`}
+                style = {divStyle}
+                onMouseEnter = {(e) => onMouseEnter(row,col,e)}
+                onMouseDown = {(e) => onMouseDown(row,col,e)}
+                onMouseLeave = {(e) => onMouseLeave(row,col,e)}
+                onMouseUp = {(e) => onMouseUp(row,col,e)}
             >
            
             {   
                 <div className = { (isEnd  || isStart) ? `imageContainerSE` : `imageContainer ${isWeighted ? classOf['isWeighted'] : ''}`}>
-                {(isWeighted && !isWall && !isStart && !isEnd && animation!='Low' && !isShortestPathNode) ? 
+                {(isWeighted && !isWall && !isStart && !isEnd && animation!='Low' && animation != 'None' && !isShortestPathNode) ? 
                         <img 
-                        draggable = "false" 
+                        // draggable = "false" 
                         className = {`weightImage${animation} selectDisable`} 
                         src = {
                             isWeighted  ? weight === 2 ? tree1 : tree3 : ''
