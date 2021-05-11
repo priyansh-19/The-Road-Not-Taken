@@ -83,8 +83,12 @@ body {
   transition:  0.2s ease-in;
   align-self: center;
   left: 48%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding-left: 12px;
   padding-right: 12px;
+  padding-bottom: 4px;
   font-size: 40px;
   font-family: 'Open Sans';
   font-weight: 100;
@@ -92,12 +96,38 @@ body {
   color: rgb(241, 241, 241);
   border-radius: 5px;
   border-style: none;
+  width: 3.6%;
+  border: none;
+}
+.XButton {
+  transition: all 0.2s;
+  transition:  0.2s ease-in;
+  align-self: center;
+  left: 48%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-bottom: 4px;
+  font-size: 40px;
+  font-family: 'Open Sans';
+  font-weight: 400;
+  background-color: black;
+  color: rgb(241, 241, 241);
+  border-radius: 5px;
+  border-style: none;
+  width: 3.6%;
   border: none;
 }
 .goButton:hover{
     color:  rgb(115, 210, 236);
     cursor: pointer;
    
+}
+.XButton:hover{
+  color:  rgb(247, 132, 255);
+  cursor: pointer;
 }
 .goButton:active{
 

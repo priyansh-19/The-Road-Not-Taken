@@ -1,3 +1,44 @@
-.Slider{
-    
+.slider-form{
+    transition : all 0.4s; 
+    /* position: absolute; */
+    display: flex;
+    padding: 2px;
+    /* border: 1px solid steelblue; */
+    padding: 5px;
+    left: 17%;
+    /* width: 300px; */
+    bottom: 0%;
+    height: 30%;
+    margin: 10px;
+}
+.slider-button{
+    /* position: relative; */
+    border: 1px solid steelblue;
+    font-family: 'Roboto';
+    font-size: 15px;
+    padding: 6px;
+    font-weight: 200;
+    bottom: 0%;
+    /* left: 20%; */
+    display: flex;
+    align-items: center;
+}
+
+.slider-input-open{
+    transition : all 0.4s; 
+    transform: translateX(10px);
+}
+.slider-input-closed{
+    opacity: 0;
+    transition : all 0.4s; 
+    pointer-events: none;
+}
+.slider-button:hover{
+    color:  rgb(6, 103, 103);
+    cursor: pointer;
+   
+}
+.slider-button:active{
+ 
+  box-shadow: 0 0 5px -1px #4caf8c;
 }

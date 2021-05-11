@@ -39,9 +39,9 @@ class Header extends React.Component {
                </div>
                 
                 <li 
-                onClick = {this.props.onClickVisualize}
-                className = 'goButton'
-                > GO </li>
+                    onClick = {this.props.isVisualizing ? this.props.stopVisualizing : this.props.onClickVisualize}
+                    className = {`${ this.props.isVisualizing ? 'X' : 'go'}Button`}
+                > {this.props.isVisualizing ? 'X' : 'Go'} </li>
 
                 <div className = 'rightHeader2'>
 

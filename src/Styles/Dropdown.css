@@ -27,22 +27,7 @@
     padding: 4px;
     transform : translateZ(1);
 }
-.dd-list-item-form{
-    position: relative;
-    border: 1px solid steelblue;
-    width: 50%;
-    height: 10px;
-    padding: 0px;
-    margin: 0px;
-    /* border: 1px solid lightgreen; */
 
-}
-.dd-list-item-form input{
-    margin: 0px;
-    padding: 0px;
-    position: absolute;
-    width: 100%;
-}
 .openList{
     opacity: 1;
     pointer-events: all;

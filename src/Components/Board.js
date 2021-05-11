@@ -1,6 +1,7 @@
 import React from 'react';
 import Node from './Node';
 import '../Styles/Board.css'
+import '../Styles/Midarea.css'
 import Header from './Header'
 import AlgorithmList from './AlgorithmList';
 import Stats from './Stats';
@@ -36,7 +37,7 @@ const speedMap = {
     'Instant' : -1,
 }
 class Board extends React.Component {
-
+    
     constructor(){
         super();
         const {startX,startY,endX,endY,xNodes,yNodes,sideLength} = this.precomputation();
@@ -67,6 +68,8 @@ class Board extends React.Component {
             renderInstantPath : false,
             isPathVisualized : false,
             isSpeedCustom : false,
+            isVisualizing : false,
+
 
             cellSize : 'Medium',
             animation : 'Max',
@@ -266,11 +269,13 @@ class Board extends React.Component {
     createNewGrid = async (path,renderState,comparisons, renderAtOnce = false) =>{
         let {nodes,nodesVisited,pathNodes,pathWeight} = this.state;
 
+
             for(let node of path){
                 let i = node[0];
                 let j = node[1];
                 const type = node.length == 3 ? node[2] : 0;
 
+                    if(this.state.isVisualizing === false){console.log('stop visualizing');return ;}
                     if(renderState === 0 ) { if(type == 0)nodes[i][j].isVisited = true; if(type == 1) nodes[i][j].isVisitedTarget = true; nodes[i][j].isShortestPathNode = false; nodesVisited++; }
                     else if(renderState === 1) {nodes[i][j].isShortestPathNode = true; nodes[i][j].isVisited = false; nodes[i][j].isVisitedTarget = false;pathNodes++; pathWeight += nodes[i][j].weight;}
                     if(comparisons!=-1)nodesVisited = comparisons;
@@ -284,13 +289,14 @@ class Board extends React.Component {
                     }
             }
             this.setState({nodes,nodesVisited,pathNodes,pathWeight,isPathVisualized:true});
-            return;
+            return (renderState === 1);
     
     }
 
     visualizeAlgorithm = async (event, isMoved) =>{
+
         await this.clearPath('Path');
-        if(!isMoved) this.setState({pathFoundState:-1,renderInstantPath:false});
+        if(!isMoved) this.setState({pathFoundState:-1,renderInstantPath:false,isVisualizing:false});
         const {isSelectedAlgorithm} = this.state;
         const paths = algorithmList[isSelectedAlgorithm](this.state);
         const path = paths[0];
@@ -298,10 +304,12 @@ class Board extends React.Component {
         const pathFoundState = paths[2] ? 1 : 0;
         const comparisons = paths.length == 4 ? paths[3] : -1;
         if(pathFoundState){shortestPath.push([this.state.endY,this.state.endX]);shortestPath.unshift([this.state.startY,this.state.startX]); }
-            this.clearPath('Path');
+
+            this.setState({isVisualizing:true});
             await this.createNewGrid(path,0,comparisons,this.state.renderInstantPath || this.state.speed == -1);
-            await this.createNewGrid(shortestPath,1,comparisons,this.state.renderInstantPath || this.state.speed === -1);
-            this.setState({pathFoundState:1})
+            let res = await this.createNewGrid(shortestPath,1,comparisons,this.state.renderInstantPath || this.state.speed === -1);
+            // if(res) this.setState({pathFoundState:1})
+            this.setState({isVisualizing:false,pathFoundState:res})
     }
 
     selectThisAlgorithm = (algorithm) =>{
@@ -326,8 +334,6 @@ class Board extends React.Component {
         this.setState({weight});
     }
     setSpeed = (speed) =>{
-        console.log('speed' ,speed, typeof(speed));
-        
         if(speed === 'Custom'){
             this.setState({isSpeedCustom:true,})
         }
@@ -340,6 +346,9 @@ class Board extends React.Component {
         }
         
     }
+    stopVisualizing = () =>{
+        this.setState({isVisualizing:false})
+    }
 
     clearPath =  async (value) =>{
         let {nodes} = this.state;
@@ -351,14 +360,11 @@ class Board extends React.Component {
                 if(value === 'All'){node.isWall = false;node.isWeighted =false;node.weight =1;node.isVisited = false;node.isVisitedTarget = false;node.isShortestPathNode=false;}
             })
         });
-        this.setState({nodes,nodesVisited:0,pathNodes:0,pathWeight:0,isPathVisualized:false});
+        this.setState({nodes,nodesVisited:0,pathNodes:0,pathWeight:0,isPathVisualized:false,isVisualizing:false});
         
        if(this.state.speed === -1 && (!this.state.renderInstantPath)) await new Promise(r => setTimeout(r,));
-        // await new Promise(r => setTimeout(r,20*(this.state.speed === 'Instant' && (!this.state.renderInstantPath))));
     }
     render(){
-        console.log('render',this.state.speed);
-        // console.log(this.state.renderInstantPath)
         const {nodes} = this.state;
         return (
             <div className="screen">
@@ -370,18 +376,16 @@ class Board extends React.Component {
                 setAnimation = {this.setAnimation}
                 setWeight = {this.setWeight}
                 setSpeed = {this.setSpeed}
+                stopVisualizing = {this.stopVisualizing}
+                isVisualizing = {this.state.isVisualizing}
             >Visualize</Header>
 
             <div className = 'mid-area-div'>
-                { (this.state.isSpeedCustom) ? 
-                // <div>Yes it works</div>
                     <Slider
-                    setSpeed = {this.setSpeed}
+                        setSpeed = {this.setSpeed}
+                        currentSpeed = {this.state.speed}
                     />
-                    // <CustomInputForm
-                    //     setSpeed ={ this.setSpeed}
-                    // />
-                 : null } 
+                  
             </div>
             <div className="mainArea">
                 
