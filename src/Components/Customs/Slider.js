@@ -1,6 +1,10 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import '../Styles/Slider.css'
+import '../..//Styles/Slider.css';
+import Typography from '@material-ui/core/Typography';
+import Slider1 from '@material-ui/core/Slider';
+import { nativeTouchData } from 'react-dom/cjs/react-dom-test-utils.development';
+
 
 const Slider = (props) =>{
     
@@ -32,8 +36,11 @@ const Slider = (props) =>{
     return (
         <form class = 'slider-form'>
             <div class = 'slider-button' onClick = {toggleSlider}>Speed</div>
+            {/* <Typography id="slider-always" gutterBottom>
+                Speeed
+             </Typography> */}
             <input id = 'fetchme' className = 'slider-input-closed' min = {minSpeed} max = {maxSpeed}  type = "range" 
-                value = {maxSpeed -props.currentSpeed}
+                defaultValue = {maxSpeed -props.currentSpeed}
                 onChange = {(e)=>{onChange(e)}}
                 onMouseDown = {(e)=>{setMouseState('down')}}
                 onMouseUp = { (e) => { onMouseUp(e)} }

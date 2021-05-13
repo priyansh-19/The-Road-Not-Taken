@@ -1,12 +1,10 @@
 import React from 'react';
 import Node from './Node';
 import '../Styles/Board.css'
-import '../Styles/Midarea.css'
 import Header from './Header'
 import AlgorithmList from './AlgorithmList';
 import Stats from './Stats';
-import CustomInputForm from './Form';
-import Slider from './Slider';
+import CustomsLane from '../Components/CustomsLane';
 import {algorithmBFS} from '../Algorithms/BFS';
 import {algorithmDFS} from '../Algorithms/DFS';
 import { algorithmDijkstras } from '../Algorithms/Dijkstras';
@@ -69,11 +67,11 @@ class Board extends React.Component {
             isPathVisualized : false,
             isSpeedCustom : false,
             isVisualizing : false,
-
+            isTableFlipped : false,
 
             cellSize : 'Medium',
             animation : 'Max',
-            weight : '2x',
+            weight : 2,
             speed : 20,
             shortestPathSpeed : 30,
             nodes:[]
@@ -147,7 +145,7 @@ class Board extends React.Component {
         else if(e.ctrlKey){
             nodes[row][col].isWall = false;
             nodes[row][col].isVisited = false;
-            nodes[row][col].weight = parseInt(this.state.weight.slice(0,-1));
+            nodes[row][col].weight = this.state.weight;
             nodes[row][col].isWeighted ^= 1;
             this.setState({nodes,isMouseClicked:true,isMouseClickedFor:'weight'});
         }
@@ -197,7 +195,7 @@ class Board extends React.Component {
 
             nodes[row][col].isWall = false;
             nodes[row][col].isVisited = false;
-            nodes[row][col].weight = parseInt(this.state.weight.slice(0,-1));
+            nodes[row][col].weight = this.state.weight;
             nodes[row][col].isWeighted = true;
         }
         else{
@@ -331,7 +329,16 @@ class Board extends React.Component {
         this.setState({animation});
     }
     setWeight = (weight) =>{
-        this.setState({weight});
+        let x ;
+        // console.log(weight,typeof(weight))
+
+        if(typeof(weight) === 'string'){
+            x = parseInt(weight.slice(0,-1));
+        }
+        else{
+            x = weight;
+        }
+        this.setState({weight:x});
     }
     setSpeed = (speed) =>{
         if(speed === 'Custom'){
@@ -349,7 +356,9 @@ class Board extends React.Component {
     stopVisualizing = () =>{
         this.setState({isVisualizing:false})
     }
-
+    setFlippedState = (isFlipped) =>{
+        this.setState({isTableFlipped:isFlipped});
+    }
     clearPath =  async (value) =>{
         let {nodes} = this.state;
         nodes.forEach( (row)=>{
@@ -379,14 +388,16 @@ class Board extends React.Component {
                 stopVisualizing = {this.stopVisualizing}
                 isVisualizing = {this.state.isVisualizing}
             >Visualize</Header>
-
-            <div className = 'mid-area-div'>
-                    <Slider
-                        setSpeed = {this.setSpeed}
-                        currentSpeed = {this.state.speed}
-                    />
-                  
-            </div>
+            {/* <div onClick = {()=>{this.setState({isTableFlipped:!(this.state.isTableFlipped)})}}>FLIP</div> */}
+            
+            <CustomsLane 
+                setSpeed = {this.setSpeed}
+                setWeight = {this.setWeight}
+                setFlippedState = {this.setFlippedState}
+                speed = {this.state.speed}
+                weight = {this.state.weight}
+            />
+           
             <div className="mainArea">
                 
                 <AlgorithmList
@@ -401,7 +412,7 @@ class Board extends React.Component {
                             return <tr key = {i}>
                                 {row.map((node,j) => {
                                     const {row,col,isStart,isEnd,isVisited,isVisitedTarget,isWall,isShortestPathNode,weight,isWeighted} = node;
-                                    return <Node 
+                                    return<Node 
                                         key = {`${i} + ${j}`}
                                         row = {row}
                                         col = {col}
@@ -419,6 +430,7 @@ class Board extends React.Component {
                                         onMouseLeave = {this.onMouseLeave}
                                         onMouseUp = {this.onMouseUp}
                                         animation = {this.state.renderInstantPath ? 'None' : this.state.animation}
+                                        isTableFlipped = {this.state.isTableFlipped}
                                     />
                                     })
                                 }

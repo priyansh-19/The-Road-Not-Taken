@@ -4,7 +4,7 @@ import tree1 from '../images/tree4.png';
 import tree3 from '../images/tree4.png';
 import flag from '../images/red-flag.png';
 import levi from '../images/levi.png'
-
+import '../Styles/NodeFlipped.css';
 
 class Node extends React.Component {
  
@@ -26,16 +26,25 @@ class Node extends React.Component {
             isWeighted,
             animation,
             weight,
+            isTableFlipped,
+
             } = this.props;
         
-        
-        const classOf = {
+            const classOf = {
             isWall : `isWall${animation}`,
             isVisited : `visited${animation}`,
             isShortestPathNode : `shortestPathNode${animation}`,
             isWeighted : `isWeighted${weight}x`,
             isVisitedTarget : `visitedTarget${animation}`,
+        
         }
+        const nodevalue = 
+        isStart ? '' : 
+            isEnd ? '' :
+                isWeighted ? weight : 
+                    isWall ? '' : ' '
+            
+
 
         const addClass = 
         isStart && isShortestPathNode? `isStart ${classOf['isShortestPathNode']}` :
@@ -51,10 +60,9 @@ class Node extends React.Component {
             height : `${sideLength}px`,
             width : `${sideLength}px`,
         }
-  
         return(
             <td 
-                className = {`node ${addClass} .selectDisable`} 
+                className = {`node ${addClass}`} 
                 id = {`${row}${col}`}
                 style = {divStyle}
                 onMouseEnter = {(e) => onMouseEnter(row,col,e)}
@@ -63,7 +71,7 @@ class Node extends React.Component {
                 onMouseUp = {(e) => onMouseUp(row,col,e)}
             >
            
-            {   
+            {   !isTableFlipped ? 
                 <div className = { (isEnd  || isStart) ? `imageContainerSE` : `imageContainer ${isWeighted ? classOf['isWeighted'] : ''}`}>
                 {(isWeighted && !isWall && !isStart && !isEnd && animation!='Low' && animation != 'None' && !isShortestPathNode) ? 
                         <img 
@@ -76,8 +84,9 @@ class Node extends React.Component {
                 : null}
                  { isEnd ? <img src = {flag} className = 'isEndImage'/> : ''}
                  { isStart ? <img src = {levi} className = 'isStartImage'/> : ''}
-                    
                 </div>
+                :
+                <div class = 'flipped-parent-div'>{nodevalue}</div>
             }    
         </td>
         )

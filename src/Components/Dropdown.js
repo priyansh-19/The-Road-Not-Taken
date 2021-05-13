@@ -1,6 +1,7 @@
 import React,{useState,useEffect,useRef} from 'react';
 import '../Styles/Dropdown.css';
 import dropDownArrow from '../images/drop-down-arrow.svg'
+import Slider from './Customs/Slider'
 
 const Dropdown = (props) =>{
     const [flag,setFlag] = useState(false);
