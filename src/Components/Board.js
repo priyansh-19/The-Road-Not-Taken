@@ -116,7 +116,6 @@ class Board extends React.Component {
     }
 
     recomputation(){
-        console.log(this.state.animation)
         let {viewPortHeight,viewPortWidth,cellSize,numberOfCells} = this.state;
         const Multiplier = cellSizeMap[cellSize];
         viewPortHeight *= (0.6);
@@ -275,7 +274,7 @@ class Board extends React.Component {
                 let j = node[1];
                 const type = node.length == 3 ? node[2] : 0;
 
-                    if(this.state.isVisualizing === false){console.log('stop visualizing');return ;}
+                    if(this.state.isVisualizing === false){return ;}
                     if(renderState === 0 ) { if(type == 0)nodes[i][j].isVisited = true; if(type == 1) nodes[i][j].isVisitedTarget = true; nodes[i][j].isShortestPathNode = false; nodesVisited++; }
                     else if(renderState === 1) {nodes[i][j].isShortestPathNode = true; nodes[i][j].isVisited = false; nodes[i][j].isVisitedTarget = false;pathNodes++; pathWeight += nodes[i][j].weight;}
                     if(comparisons!=-1)nodesVisited = comparisons;
@@ -333,7 +332,6 @@ class Board extends React.Component {
     }
     setWeight = (weight) =>{
         let x ;
-        // console.log(weight,typeof(weight))
 
         if(typeof(weight) === 'string'){
             x = parseInt(weight.slice(0,-1));
@@ -381,7 +379,7 @@ class Board extends React.Component {
     }
     render(){
         const {nodes} = this.state;
-        const classForGrid = (this.state.darkMode) ? 'mainGrid-dark' : null;
+        const classForGrid = (this.state.darkMode) ? 'mainGrid-dark' : 'mainGrid';
         return (
             <div className="screen">
             <Header 
@@ -413,7 +411,7 @@ class Board extends React.Component {
                     isSelectedAlgorithm = {this.state.isSelectedAlgorithm}
                     selectThisAlgorithm = {this.selectThisAlgorithm}
                 />
-                <table className = {`mainGrid  ${classForGrid} onChangeMainGrid ${this.state.pathFoundState === 1 ? 'onPathFound' : this.state.pathFoundState === 0 ? 'onPathNotFound' : ''}`}>
+                <table className = {`${classForGrid}  ${this.state.pathFoundState === true ? 'onPathFound' : this.state.pathFoundState === 0 ? 'onPathNotFound' : ''}`}>
                     {/* <div class = 'messageToUser' >{this.state.message}</div> */}
                     <tbody className = "table-body">
                         {nodes.map( (row,i) => {
