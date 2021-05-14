@@ -25,7 +25,7 @@ class Header extends React.Component {
 
                         <Dropdown
                             functions = {{setSpeed:this.props.setSpeed,}}
-                            values = {{header:'Speed',list:['Slow','Medium','Fast','Instant','Custom']}}
+                            values = {{header:'Speed',list:['Slow','Medium','Fast','Instant']}}
                             selectedItem = 'Fast'
                             class = 'clearButton'
                         />

@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Switch from './Customs/Switch';
 import CustomInputForm from './Customs/Form';
 import Slider from './Customs/Slider';
+import DarkMode from '../Components/Customs/DarkMode';
+
 import '../Styles/CustomsLane.css';
 
 const CustomsLane = (props)=>{
-    const {setFlippedState,setWeight,setSpeed,speed,weight} = props;
+    const {setFlippedState,setWeight,setSpeed,speed,weight,darkMode,toggleDarkMode} = props;
     const [isLaneOpen,setIsLaneOpen] = useState(false);
 
     const openLane = ()=>{
@@ -34,6 +36,10 @@ const CustomsLane = (props)=>{
                     currentSpeed = {speed}
                 />
             </div>
+                <DarkMode
+                    darkMode = {darkMode}
+                    toggleDarkMode = {toggleDarkMode}
+                />
         </div>
     );
 }

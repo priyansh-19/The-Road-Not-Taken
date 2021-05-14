@@ -68,6 +68,8 @@ class Board extends React.Component {
             isSpeedCustom : false,
             isVisualizing : false,
             isTableFlipped : false,
+            darkMode : false,
+
 
             cellSize : 'Medium',
             animation : 'Max',
@@ -292,6 +294,7 @@ class Board extends React.Component {
     }
 
     visualizeAlgorithm = async (event, isMoved) =>{
+        
 
         await this.clearPath('Path');
         if(!isMoved) this.setState({pathFoundState:-1,renderInstantPath:false,isVisualizing:false});
@@ -356,6 +359,9 @@ class Board extends React.Component {
     stopVisualizing = () =>{
         this.setState({isVisualizing:false})
     }
+    toggleDarkMode = () =>{
+        this.setState({darkMode:!this.state.darkMode});
+    }
     setFlippedState = (isFlipped) =>{
         this.setState({isTableFlipped:isFlipped});
     }
@@ -375,6 +381,7 @@ class Board extends React.Component {
     }
     render(){
         const {nodes} = this.state;
+        const classForGrid = (this.state.darkMode) ? 'mainGrid-dark' : null;
         return (
             <div className="screen">
             <Header 
@@ -389,13 +396,14 @@ class Board extends React.Component {
                 isVisualizing = {this.state.isVisualizing}
             >Visualize</Header>
             {/* <div onClick = {()=>{this.setState({isTableFlipped:!(this.state.isTableFlipped)})}}>FLIP</div> */}
-            
             <CustomsLane 
                 setSpeed = {this.setSpeed}
                 setWeight = {this.setWeight}
                 setFlippedState = {this.setFlippedState}
                 speed = {this.state.speed}
                 weight = {this.state.weight}
+                darkMode = {this.state.darkMode}
+                toggleDarkMode = {this.toggleDarkMode}
             />
            
             <div className="mainArea">
@@ -405,7 +413,7 @@ class Board extends React.Component {
                     isSelectedAlgorithm = {this.state.isSelectedAlgorithm}
                     selectThisAlgorithm = {this.selectThisAlgorithm}
                 />
-                <table className = {`mainGrid onChangeMainGrid ${this.state.pathFoundState === 1 ? 'onPathFound' : this.state.pathFoundState === 0 ? 'onPathNotFound' : ''}`}>
+                <table className = {`mainGrid  ${classForGrid} onChangeMainGrid ${this.state.pathFoundState === 1 ? 'onPathFound' : this.state.pathFoundState === 0 ? 'onPathNotFound' : ''}`}>
                     {/* <div class = 'messageToUser' >{this.state.message}</div> */}
                     <tbody className = "table-body">
                         {nodes.map( (row,i) => {
@@ -431,6 +439,7 @@ class Board extends React.Component {
                                         onMouseUp = {this.onMouseUp}
                                         animation = {this.state.renderInstantPath ? 'None' : this.state.animation}
                                         isTableFlipped = {this.state.isTableFlipped}
+                                        darkMode = {this.state.darkMode }
                                     />
                                     })
                                 }

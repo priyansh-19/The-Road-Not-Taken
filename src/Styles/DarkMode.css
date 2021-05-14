@@ -1,0 +1,10 @@
+.DarkMode-container{
+    position: absolute;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    /* border: 1px solid black; */
+    right: 20%;
+    /* right: 0px; */
+    top: 60%;
+}

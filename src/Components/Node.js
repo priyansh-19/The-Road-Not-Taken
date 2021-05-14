@@ -27,14 +27,15 @@ class Node extends React.Component {
             animation,
             weight,
             isTableFlipped,
+            darkMode,
 
             } = this.props;
         
             const classOf = {
-            isWall : `isWall${animation}`,
-            isVisited : `visited${animation}`,
-            isShortestPathNode : `shortestPathNode${animation}`,
-            isWeighted : `isWeighted${weight}x`,
+            isWall : `${darkMode ? 'darkWall' : `isWall${animation}` } `,
+            isVisited : `visited${darkMode ? 'Dark' : animation }`,
+            isShortestPathNode : `shortestPathNode${darkMode?'Dark':animation}`,
+            isWeighted : `${darkMode ? 'isWeightedDark' : `isWeighted${weight}x`}`,
             isVisitedTarget : `visitedTarget${animation}`,
         
         }
@@ -62,7 +63,7 @@ class Node extends React.Component {
         }
         return(
             <td 
-                className = {`node ${addClass}`} 
+                className = {`node${darkMode ? '-dark' : ''} ${addClass}`} 
                 id = {`${row}${col}`}
                 style = {divStyle}
                 onMouseEnter = {(e) => onMouseEnter(row,col,e)}
@@ -73,7 +74,7 @@ class Node extends React.Component {
            
             {   !isTableFlipped ? 
                 <div className = { (isEnd  || isStart) ? `imageContainerSE` : `imageContainer ${isWeighted ? classOf['isWeighted'] : ''}`}>
-                {(isWeighted && !isWall && !isStart && !isEnd && animation!='Low' && animation != 'None' && !isShortestPathNode) ? 
+                {(isWeighted && !isWall && !isStart && !isEnd && animation!='Low' && animation != 'None' && !isShortestPathNode && !darkMode) ? 
                         <img 
                         // draggable = "false" 
                         className = {`weightImage${animation} selectDisable`} 

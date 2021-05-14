@@ -26,12 +26,17 @@
 .mainGrid{
     
     border-collapse: collapse;
-    /* display: flex; */
     flex-direction: column;
-    /* height: 100%; */
     overflow: auto;
-    /* background-color: rgb(32, 34, 28); */
+    background-color:rgb(247, 247, 238);
 
+
+}
+.mainGrid-dark{
+    border-collapse: collapse;
+    flex-direction: column;
+    overflow: auto;
+    background-color: rgb(29, 26, 26);
 }
 
 .onPathFound{
