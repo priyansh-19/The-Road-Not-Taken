@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/The-Road-Not-Taken/static/css/main.8c7e7f88.chunk.css",
+    "main.js": "/The-Road-Not-Taken/static/js/main.49c81b24.chunk.js",
+    "main.js.map": "/The-Road-Not-Taken/static/js/main.49c81b24.chunk.js.map",
+    "runtime-main.js": "/The-Road-Not-Taken/static/js/runtime-main.94cd13ad.js",
+    "runtime-main.js.map": "/The-Road-Not-Taken/static/js/runtime-main.94cd13ad.js.map",
+    "static/js/2.9b2bd8a7.chunk.js": "/The-Road-Not-Taken/static/js/2.9b2bd8a7.chunk.js",
+    "static/js/2.9b2bd8a7.chunk.js.map": "/The-Road-Not-Taken/static/js/2.9b2bd8a7.chunk.js.map",
+    "index.html": "/The-Road-Not-Taken/index.html",
+    "static/css/main.8c7e7f88.chunk.css.map": "/The-Road-Not-Taken/static/css/main.8c7e7f88.chunk.css.map",
+    "static/js/2.9b2bd8a7.chunk.js.LICENSE.txt": "/The-Road-Not-Taken/static/js/2.9b2bd8a7.chunk.js.LICENSE.txt",
+    "static/media/drop-down-arrow.925edd47.svg": "/The-Road-Not-Taken/static/media/drop-down-arrow.925edd47.svg",
+    "static/media/levi.88e9217a.png": "/The-Road-Not-Taken/static/media/levi.88e9217a.png",
+    "static/media/tree4.f2567baa.png": "/The-Road-Not-Taken/static/media/tree4.f2567baa.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.94cd13ad.js",
+    "static/js/2.9b2bd8a7.chunk.js",
+    "static/css/main.8c7e7f88.chunk.css",
+    "static/js/main.49c81b24.chunk.js"
+  ]
+}
