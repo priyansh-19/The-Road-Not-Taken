@@ -95,7 +95,6 @@
     animation-duration: 1.1s; 
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
-   
 }
 .visitedMedium{
     animation-name: visitedAnimationMedium;

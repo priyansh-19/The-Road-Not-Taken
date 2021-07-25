@@ -28,7 +28,8 @@
     border-collapse: collapse;
     flex-direction: column;
     overflow: auto;
-    background-color:rgb(247, 247, 238);
+    margin-bottom: auto;
+    /* background-color:rgb(247, 247, 238); */
 
 }
 .mainGrid-dark{
@@ -36,6 +37,7 @@
     flex-direction: column;
     overflow: auto;
     background-color: rgb(29, 26, 26);
+    margin-bottom: auto;
 }
 
 .onPathFound{
