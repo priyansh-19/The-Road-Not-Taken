@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-
+import Tutorial from './Components/Tutorial'
 
 ReactDOM.render(
   <React.StrictMode>
+    <Tutorial/>
     <App />
   </React.StrictMode>,
   document.getElementById('root')
